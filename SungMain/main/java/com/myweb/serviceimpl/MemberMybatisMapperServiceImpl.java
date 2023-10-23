@@ -55,9 +55,9 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 	}
 
 	@Override
-	public int idCheck(String id) throws Exception {
+	public int idCheck(String user_id) throws Exception {
 		
-		return dao.idCheck(id);
+		return dao.idCheck(user_id);
 	}
 
 

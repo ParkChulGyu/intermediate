@@ -13,6 +13,6 @@ public interface IMemberService {
 	int delete(MemberDTO dto);
 	int deleteMember(String[] id);
 	int nameCheck(String name) throws Exception;
-	int idCheck(String id) throws Exception;
+	int idCheck(String user_id) throws Exception;
 
 }

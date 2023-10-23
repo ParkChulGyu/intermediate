@@ -14,7 +14,7 @@ rs:<%=request.getAttribute("rs") %>
 </hr>
 <form action="loginP" method="post">
 	<table border="1">
-		<tr><th>ID</th><td><input type="text" name="id"></td></tr>
+		<tr><th>ID</th><td><input type="text" name="user_id"></td></tr>
 		<tr><th>PW</th><td><input type="text" name="pw"></td></tr>
 		<tr><td colspan="2"><input type="submit" value="Submit"></td></tr>
 	</table>

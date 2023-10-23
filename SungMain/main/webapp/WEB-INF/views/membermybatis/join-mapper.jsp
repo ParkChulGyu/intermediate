@@ -14,11 +14,14 @@
 <hr>
 <form action="joinP" method="post">
 	<table border="1">
-		<tr><th>ID</th><td><input type="text" id="id" name="id"><button class="idCheck" type="button" id="idCheck"  value="N">중복확인</button></td></tr>
+		<tr><th>ID</th><td><input type="text" id="user_id" name="user_id"><button class="idCheck" type="button" id="idCheck"  value="N">중복확인</button></td></tr>
 		<tr><th>PW</th><td><input type="text" name="pw"></td></tr>
 		<tr><th>PW2</th><td><input type="text" name="pw2"></td></tr>
 		<tr><th>Name</th><td><input type="text" id="name" name="name"><button class="nameCheck" type="button" id="nameCheck"  value="N">중복확인</button></td></tr>
-		<tr><th>Role</th><td>
+		<tr><th>nickName</th><td><input type="text" name="nickName"></td></tr>
+		<tr><th>email</th><td><input type="text" name="email"></td></tr>
+		<tr><th>PhoneNumber</th><td><input type="text" name="PhoneNumber"></td></tr>
+		<tr><th>grade</th><td>
 		<input type="radio" name="role" value="1" checked="checked">Member
 		<input type="radio" name="role" value="0">Admin
 		</td></tr>
@@ -28,11 +31,11 @@
 <script>
 
 window.onload = function() {
-	if (password != password_ck) {
-        $('#spanPwdChk2').text('비밀번호가 일치하지 않습니다.');
-        divChk.classList.add('red');
-        input.focus();
-        flag = false;
+	//if (password != password_ck) {
+      //  $('#spanPwdChk2').text('비밀번호가 일치하지 않습니다.');
+      //  divChk.classList.add('red');
+      //  input.focus();
+       // flag = false;
         
       
         		$('.idCheck').click( function(){  
@@ -52,12 +55,12 @@ window.onload = function() {
 
 
 function idcheck() {
-		const id = $("#id").val();
+		const user_id = $("#user_id").val();
 		console.log("id check입니다" + id);
 	$.ajax({
         type: 'POST',
         url: '../membermybatis/idCheckReal',
-        data: {id},
+        data: {user_id},
         dataType: 'json',
         success: function(data) {
         	
@@ -80,7 +83,8 @@ function idcheck() {
 };
 
 function namecheck() {
-	const name = $("#name").val()
+	const name = $("#name").val();
+	console.log("name check입니다" + name);
     $.ajax({
         type: 'POST',
         url: '../membermybatis/nameCheckReal',
@@ -88,10 +92,10 @@ function namecheck() {
         dataType: 'json',
         success: function(data) {
 			if(data == 1){
-				alert("중복된 이메일입니다.")
+				alert("중복된 닉네임입니다.")
 			}else if(data == 0){
 				$("#nameCheck").attr("value","Y");
-				alert("사용 가능한 이메일입니다.")
+				alert("사용 가능한 닉네임입니다.")
 			}
         	
         

@@ -27,21 +27,29 @@
 	<th >ID</th>
 	<th>PW</th>
 	<th>Name</th>
-	<th>Role</th>
-	<th>Regdate</th>
+	<th>NickName</th>
+	<th>Email</th>
+	<th>PhonNumber</th>
+	<th>Sysdate</th>
+	<th>Point</th>
+	<th>Grade</th>
 	<th>전체선택<input type="checkbox" name="checkAll" id="th_checkAll" onclick="checkAll();"></th>
 </tr>
 	<button class="delete">삭제</button>
 
 <% for (MemberDTO dto : list) { %>
 	<tr>
-		<td><%=dto.getIdx() %></td>
-		<td><%=dto.getId() %></td>
+		<td><%=dto.getUser_idx()%></td>
+		<td><%=dto.getUser_id()%></td>
 		<td><%=dto.getPw() %></td>
-		<td><%=dto.getName() %></td>
-		<td><%=dto.getRole() %></td>
-		<td><%=dto.getRegdate() %></td>
-		<td><input class="chk" type="checkbox" name="checkRow" id=<%=dto.getId() %> value=<%=dto.getId() %>></td>
+		<td><%=dto.getName()%></td>
+		<td><%=dto.getNickName() %></td>
+		<td><%=dto.getEmail() %></td>
+		<td><%=dto.getPhoneNumber() %></td>
+		<td><%=dto.getSysdate() %></td>
+		<td><%=dto.getPoint() %></td>
+		<td><%=dto.getGrade() %></td>
+		<td><input class="chk" type="checkbox" name="checkRow" id=<%=dto.getUser_id()%> value=<%=dto.getUser_id()%>></td>
 	</tr>
 <% } %>
 </table>
@@ -85,7 +93,7 @@
                 type: "POST",
                 traditional : true,
                 url: "../membermybatis/memberdelete",
-                data:  {"id":arr},
+                data:  {"user_id":arr},
                 dataType:"json",
                 success: function(response){
                 	console.log("response 체크 :" + response);

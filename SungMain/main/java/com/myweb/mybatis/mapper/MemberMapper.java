@@ -23,7 +23,7 @@ public interface MemberMapper {
 	
 	public int nameCheck(String name) throws Exception;
 	
-	public int idCheck(String id) throws Exception;
+	public int idCheck(String user_id) throws Exception;
 	
 	
 }
