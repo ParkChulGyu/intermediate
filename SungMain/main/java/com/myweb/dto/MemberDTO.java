@@ -13,7 +13,7 @@ public class MemberDTO{
 	private	String user_id;
 	private  String pw;
 	private String name;
-	private String nickName;
+	private String nickname;
 	private String email;
 	private String PhoneNumber;
 	private Timestamp sysdate;

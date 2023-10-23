@@ -43,7 +43,7 @@
 		<td><%=dto.getUser_id()%></td>
 		<td><%=dto.getPw() %></td>
 		<td><%=dto.getName()%></td>
-		<td><%=dto.getNickName() %></td>
+		<td><%=dto.getNickname() %></td>
 		<td><%=dto.getEmail() %></td>
 		<td><%=dto.getPhoneNumber() %></td>
 		<td><%=dto.getSysdate() %></td>

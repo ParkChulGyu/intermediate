@@ -113,6 +113,10 @@ public class MemberMybatisMapperController{
 				
 				//out.flush();
 			}else if(idResult == 0 && nameResult == 0){
+				System.out.println(dto.getNickname());
+				System.out.println(dto.getEmail());
+				System.out.println(dto.getPhoneNumber());
+				System.out.println(dto.getUser_id());
 				int rs = service.insert(dto);		
 				if (rs==1) {
 					
@@ -184,6 +188,7 @@ public class MemberMybatisMapperController{
 		
 		String user_id = (String)session.getAttribute("user_id");
 		dto.setUser_id(user_id);
+		System.out.println(dto);
 		service.update(dto);
 		
 		session.setAttribute("name", dto.getName());

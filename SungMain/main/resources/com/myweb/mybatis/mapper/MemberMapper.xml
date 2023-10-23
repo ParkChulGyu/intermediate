@@ -47,7 +47,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		nickname = #{nickname},
 		email = #{email},
 		PhoneNumber = #{PhoneNumber}
-		grade = #{grade}
 		WHERE
 		user_id = #{user_id};
 	</update>

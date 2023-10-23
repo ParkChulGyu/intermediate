@@ -18,12 +18,12 @@
 		<tr><th>PW</th><td><input type="text" name="pw"></td></tr>
 		<tr><th>PW2</th><td><input type="text" name="pw2"></td></tr>
 		<tr><th>Name</th><td><input type="text" id="name" name="name"><button class="nameCheck" type="button" id="nameCheck"  value="N">중복확인</button></td></tr>
-		<tr><th>nickName</th><td><input type="text" name="nickName"></td></tr>
+		<tr><th>nickName</th><td><input type="text" name="nickname"></td></tr>
 		<tr><th>email</th><td><input type="text" name="email"></td></tr>
 		<tr><th>PhoneNumber</th><td><input type="text" name="PhoneNumber"></td></tr>
 		<tr><th>grade</th><td>
-		<input type="radio" name="role" value="1" checked="checked">Member
-		<input type="radio" name="role" value="0">Admin
+		<input type="radio" name="role" value="" checked="checked">Member
+		<input type="radio" name="role" value="admin">Admin
 		</td></tr>
 		<tr><td colspan="2"><input type="submit" value="Submit"></td></tr>
 	</table>
@@ -56,7 +56,7 @@ window.onload = function() {
 
 function idcheck() {
 		const user_id = $("#user_id").val();
-		console.log("id check입니다" + id);
+		console.log("id check입니다" + user_id);
 	$.ajax({
         type: 'POST',
         url: '../membermybatis/idCheckReal',

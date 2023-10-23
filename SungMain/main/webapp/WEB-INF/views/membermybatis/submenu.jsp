@@ -18,7 +18,7 @@
 
 <a href="memberList-mapper">회원목록-Interface(mapper)</a> |
 
-<% if (session.getAttribute("id") == null) { %>
+<% if (session.getAttribute("user_id") == null) { %>
 <a href="join-mapper">회원가입</a> |
 <a href="login-mapper">로그인</a> |
 <% } else { %>	
@@ -26,7 +26,7 @@
 	<a href="#" onclick="deleteConfirm();">회원탈퇴</a> |
 	<a href="logout-mapper">로그아웃</a> | <br>
 
-<%=session.getAttribute("name") %>(<%=session.getAttribute("id") %>) 로그인 중
+<%=session.getAttribute("name") %>(<%=session.getAttribute("user_id") %>) 로그인 중
 <% } %>
 
 </h2>
