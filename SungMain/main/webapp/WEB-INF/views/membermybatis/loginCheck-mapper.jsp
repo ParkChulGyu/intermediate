@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%
 // loginCheck.jsp
-if(session.getAttribute("id") == null){
+if(session.getAttribute("user_id") == null){
 %>
  <script>
 	alert('session이 끊겼습니다.!!');

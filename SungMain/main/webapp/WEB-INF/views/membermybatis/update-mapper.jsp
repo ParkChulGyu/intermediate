@@ -19,15 +19,15 @@ MemberDTO dto = (MemberDTO)request.getAttribute("dto");
 <hr>
 <form action="updateP" method="post">
 	<table border="1">
-		<tr><th>ID</th><td><%=dto.getId()%></td></tr>
+		<tr><th>ID</th><td><%=dto.getUser_id()%></td></tr>
 		<tr><th>PW</th><td><input type="text" name="pw" value="<%=dto.getPw()%>"></td></tr>
 		<tr><th>Name</th><td><input type="text" name="name" value="<%=dto.getName()%>"></td></tr>
 		<tr><th>Role</th><td>
-		<%if(dto.getRole().equals("1")){%>	
+		<%if(dto.getGrade().equals("1")){%>	
 		<input type="radio" name="role" value="1" checked="checked">Member
 		<input type="radio" name="role" value="0">Admin
 		<%} %>
-		<%if(dto.getRole().equals("0")) {%>
+		<%if(dto.getGrade().equals("0")) {%>
 		<input type="radio" name="role" value="1">Member
 		<input type="radio" name="role" value="0" checked="checked">Admin
 		<%}%>

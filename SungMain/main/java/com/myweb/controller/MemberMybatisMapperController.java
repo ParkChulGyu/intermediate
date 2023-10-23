@@ -86,8 +86,8 @@ public class MemberMybatisMapperController{
 	//회원가입
 	 @ResponseBody
 	@PostMapping(value = "idCheckReal")
-	public int idCheck(String id) throws Exception{
-				int result = service.idCheck(id);
+	public int idCheck(String user_id) throws Exception{
+				int result = service.idCheck(user_id);
 				return result;
 		
 	}
@@ -95,33 +95,32 @@ public class MemberMybatisMapperController{
 	@PostMapping(value = "nameCheckReal")
 	public int nameCheck(String name) throws Exception{
 	
-				int result = service.idCheck(name);
+				int result = service.nameCheck(name);
 				return result;
 		
 	}
 	
 	//회원가입
 	@PostMapping(value = "joinP")
-	public String joinAction(HttpServletResponse response,MemberDTO dto, RedirectAttributes ra,String name,String id, String pw2 ) throws Exception {
+	public String joinAction(HttpServletResponse response,MemberDTO dto, RedirectAttributes ra,String name,String user_id, String pw2 ) throws Exception {
 		
-			int idResult = service.idCheck(id);
+			int idResult = service.idCheck(user_id);
 			int nameResult = service.idCheck(name);
 		
 			PrintWriter out = response.getWriter();
 			response.setContentType("text/html; charset=UTF-8");
 			
 			
-			//if(dto.getPw() == pw2) {
+			if(dto.getPw().equals(pw2)) {
 				
 			
 			if(idResult == 1 || nameResult == 1) {
 				view = "redirect:join-mapper";
 				
 				
-				
 				out.println("<script>alert('회원가입에 실패하셨습니다'); location.href='/web/membermybatis/join-mapper';</script>");
 				
-				out.flush();
+				//out.flush();
 			}else if(idResult == 0 && nameResult == 0){
 				int rs = service.insert(dto);		
 				if (rs==1) {
@@ -136,11 +135,11 @@ public class MemberMybatisMapperController{
 					
 			}
 
-				//}else {
+				}else {
 					out.println("<script>alert('비밀번호가 일치하지 않습니다');window.history.back();</script>");
 					out.flush();
 					
-			//	}
+				}
 			return view;		
 	}
 	
@@ -156,7 +155,7 @@ public class MemberMybatisMapperController{
 	@PostMapping(value = "loginP")
 	public String loginAction(MemberDTO dto, HttpSession session) {
 	
-		String id = dto.getId();
+		String user_id = dto.getUser_id();
 		String pw = dto.getPw();		
 		
 		
@@ -165,7 +164,7 @@ public class MemberMybatisMapperController{
 		if (dto != null) {
 			if (dto.getPw().equals(pw)) {
 				
-				session.setAttribute("id", id);
+				session.setAttribute("user_id", user_id);
 				session.setAttribute("name", dto.getName());
 				
 				view = "redirect:main-mapper";
@@ -177,10 +176,10 @@ public class MemberMybatisMapperController{
 	@GetMapping("update-mapper")
 	public String update(Model model, HttpSession session) {
 		
-		String id = (String)session.getAttribute("id");
+		String user_id = (String)session.getAttribute("user_id");
 
 		MemberDTO dto = new MemberDTO();
-		dto.setId(id);
+		dto.setUser_id(user_id);
 
 		model.addAttribute("dto", service.getMembermapper(dto));
 		
@@ -192,8 +191,8 @@ public class MemberMybatisMapperController{
 	@PostMapping("updateP")
 	public String updateAction(MemberDTO dto, HttpSession session) {
 		
-		String id = (String)session.getAttribute("id");
-		dto.setId(id);
+		String user_id = (String)session.getAttribute("user_id");
+		dto.setUser_id(user_id);
 		service.update(dto);
 		
 		session.setAttribute("name", dto.getName());
@@ -216,9 +215,9 @@ public class MemberMybatisMapperController{
 	public String deleteAction(MemberDTO dto, HttpSession session) {
 		System.out.println("delete - post");
 		
-		String id = (String)session.getAttribute("id");
+		String user_id = (String)session.getAttribute("user_id");
 		String pw = dto.getPw();
-		dto.setId(id);		
+		dto.setUser_id(user_id);		
 		
 		dto = service.getMembermapper(dto);
 		
