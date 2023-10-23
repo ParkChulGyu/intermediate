@@ -43,6 +43,15 @@ public class MemberMybatisMapperController{
 		
 		return view;				
 	}
+	
+	@GetMapping("naver")
+	public String mainInteface() {
+		System.out.println("naver");		
+		
+		view = "redirect:membermybatis/naver";
+		
+		return view;				
+	}
 		
 	
 	@GetMapping("memberList-mapper")
