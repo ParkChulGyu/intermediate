@@ -11,7 +11,7 @@ public interface IMemberService {
 	int insert(MemberDTO dto);
 	int update(MemberDTO dto);
 	int delete(MemberDTO dto);
-	int deleteMember(String[] id);
+	int deleteMember(MemberDTO dto) throws Exception;
 	int nameCheck(String name) throws Exception;
 	int idCheck(String user_id) throws Exception;
 

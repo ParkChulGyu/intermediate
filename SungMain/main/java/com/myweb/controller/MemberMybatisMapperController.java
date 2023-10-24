@@ -2,8 +2,11 @@ package com.myweb.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -46,7 +49,7 @@ public class MemberMybatisMapperController{
 		
 	
 	@GetMapping("memberList-mapper")
-	public String memberList(Model model) {
+	public String memberList(Model model) throws Exception {
 		System.out.println("memberList-mapper");
 		
 		List<MemberDTO> list = service.getMemberList();		
@@ -56,13 +59,41 @@ public class MemberMybatisMapperController{
 		return view;		
 		
 	}
+
+	@ResponseBody
 	@PostMapping(value = "memberdelete")
-	public int memberdelete(String[] id) {
-				System.out.println("id 배열 체크 " + Arrays.toString(id));
-			int result = service.deleteMember(id);
+	public int memberdelete(String[] user_id ,MemberDTO dto)  throws Exception {
+//		Map<String, Object> resultMap = new HashMap<>();
+//	    
+//	    List<Integer> results = new ArrayList<>();
+//	    for (int i = 0; i < user_id.length; i++) {
+//	        dto.setUser_id(user_id[i]);
+//	        System.out.println("dto 체크해보자 : " + dto);
+//	        int result = service.deleteMember(dto);
+//	        results.add(result);
+//	        System.out.println("result 확인 : " + result);
+//	    }
+//	    
+//	    resultMap.put("results", results);
+//	    return resultMap;
+//	}
 		
 		
-		return result;
+		
+		
+			int result = 0;
+		for(int i=0 ; i<user_id.length; i++) {
+				
+				dto.setUser_id(user_id[i]);
+					System.out.println("dto체크해보자 : " + dto);
+				result = service.deleteMember(dto);
+				System.out.println("result 확인 : " + result);
+				
+				
+				
+		}
+			return result;	
+		
 	}
 	
 	

@@ -17,7 +17,7 @@ public interface MemberMapper {
 
 	public int delete(MemberDTO dto);
 
-	public int deleteMember(String[] id);
+	public int deleteMember(MemberDTO dto) throws Exception;
 
 	public MemberDTO getMembermapper(MemberDTO dto); 
 	

@@ -45,9 +45,9 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 		return dao.delete(dto);
 	}
 	@Override
-	public int deleteMember(String[] id) {
+	public int deleteMember(MemberDTO dto) throws Exception {
 		
-		return dao.deleteMember(id);
+		return dao.deleteMember(dto);
 	}
 	
 	@Override

@@ -101,19 +101,22 @@
 		}
 		 else{
 		 console.log("ajax실행");
+		 var user_id = arr;
+		 console.log("체크할거야 : " + user_id);
           $.ajax({
               // get방식일때만 사용 contentType : 'application/json',
 			//contentType : 'application/json',
                 type: "POST",
                 traditional : true,
                 url: "../membermybatis/memberdelete",
-                data:  {"user_id":arr},
+                data:  {user_id},
                 dataType:"json",
                 success: function(response){
                 	console.log("response 체크 :" + response);
-                    if(response['rs'] = 1) {
+                    if(response == 1) {
                         alert("삭제 성공");
-                        memberSearch();
+                        window.location.reload()
+                       
                     }
                     else{
                         alert("삭제 실패");
@@ -124,8 +127,15 @@
         }
     }
 	
+	
+  
+	
+	
 $(function(){ // onload
 	//삭제
+	     
+
+	
 		$('.delete').click( function(){  
 		deleteAction()
 	
