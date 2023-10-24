@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.myweb.dto.MemberDTO"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -36,8 +37,21 @@
 	<th>전체선택<input type="checkbox" name="checkAll" id="th_checkAll" onclick="checkAll();"></th>
 </tr>
 	<button class="delete">삭제</button>
+		
+		
+        
+<%
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 a HH:mm"); 
 
+%>
+		
 <% for (MemberDTO dto : list) { %>
+	<%
+		dto.getSysdate().setHours(dto.getSysdate().getHours()-9);	
+	
+	String strNowDate = simpleDateFormat.format(dto.getSysdate()); 
+	
+	%>
 	<tr>
 		<td><%=dto.getUser_idx()%></td>
 		<td><%=dto.getUser_id()%></td>
@@ -46,7 +60,7 @@
 		<td><%=dto.getNickname() %></td>
 		<td><%=dto.getEmail() %></td>
 		<td><%=dto.getPhoneNumber() %></td>
-		<td><%=dto.getSysdate() %></td>
+		<td><%=strNowDate%></td>
 		<td><%=dto.getPoint() %></td>
 		<td><%=dto.getGrade() %></td>
 		<td><input class="chk" type="checkbox" name="checkRow" id=<%=dto.getUser_id()%> value=<%=dto.getUser_id()%>></td>

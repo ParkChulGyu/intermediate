@@ -16,7 +16,7 @@ public class MemberDTO{
 	private String nickname;
 	private String email;
 	private String PhoneNumber;
-	private Timestamp sysdate;
+	private Date sysdate ;
 	private int point;
 	private String grade;
 	

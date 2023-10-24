@@ -43,15 +43,6 @@ public class MemberMybatisMapperController{
 		
 		return view;				
 	}
-	
-	@GetMapping("naver")
-	public String mainInteface() {
-		System.out.println("naver");		
-		
-		view = "redirect:membermybatis/naver";
-		
-		return view;				
-	}
 		
 	
 	@GetMapping("memberList-mapper")
@@ -88,6 +79,7 @@ public class MemberMybatisMapperController{
 	@PostMapping(value = "idCheckReal")
 	public int idCheck(String user_id) throws Exception{
 				int result = service.idCheck(user_id);
+				
 				return result;
 		
 	}

@@ -18,6 +18,7 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 	@Override
 	public List<MemberDTO> getMemberList() {
 		
+		
 		return dao.getMemberList();
 	}
 
