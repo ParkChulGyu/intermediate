@@ -9,9 +9,5 @@
   	<typeAlias type="com.myweb.dto.PagingDTO" alias="PagingDTO"/>
   </typeAliases>
 
-  <mappers>
-    <mapper resource="com/myweb/mybatis/mapper/MemberMapper.xml"/>
-    
-  </mappers>
   
 </configuration>

@@ -9,6 +9,7 @@ import com.myweb.dto.PagingDTO;
 public interface IMemberService {
 	
 	int totalCount() ;
+	public List<MemberDTO> getMemberPaging(PagingDTO dto) ;
 	List<MemberDTO> getMemberList();
 	MemberDTO getMembermapper(MemberDTO dto);
 	int insert(MemberDTO dto);

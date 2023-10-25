@@ -13,6 +13,8 @@ public interface MemberMapper {
 	
 	public int totalCount() ;
 	
+	public List<MemberDTO> getMemberPaging(PagingDTO dto) ;
+	
 	public MemberDTO getMembermapper(MemberDTO dto); 
 
 	public List<MemberDTO> getMemberList();	

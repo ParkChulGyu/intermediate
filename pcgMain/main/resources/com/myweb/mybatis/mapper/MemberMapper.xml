@@ -6,15 +6,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.myweb.mybatis.mapper.MemberMapper">
 
 	<!--최초 페이징 -->
-	<select id="totalCount"  resultType="int">
+	<select id="totalCount" resultType="int">
         <![CDATA[
 		select count(*) from user
         ]]>
 	</select>
-	
 
-	
-	<select id="getMembermapper" resultType="com.myweb.dto.MemberDTO">
+	<!--최초 페이징 에 필요한 맴버값-->
+	<select id="getMemberPaging"
+		parameterType="com.myweb.dto.PagingDTO"
+		resultType="com.myweb.dto.MemberDTO">
+        <![CDATA[
+        select user_idx , user_id , pw , name , nickname , email, PhoneNumber , sysdate ,point, grade from user 
+        order by user_idx desc limit #{listNum} offset #{start_rownum}
+        ]]>
+	</select>
+
+
+
+	<select id="getMembermapper"
+		resultType="com.myweb.dto.MemberDTO">
         <![CDATA[
         select user_idx, user_id, pw, name, nickname, email, PhoneNumber, sysdate, point, grade
         from user 

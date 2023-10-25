@@ -22,6 +22,10 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 		return dao.totalCount();
 	} 
 	
+	public List<MemberDTO> getMemberPaging(PagingDTO dto){
+		return dao.getMemberPaging(dto);
+	} 
+	
 	@Override
 	public List<MemberDTO> getMemberList() {
 		return dao.getMemberList();

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -38,11 +39,72 @@ public class MemberMybatisMapperController{
 	@Qualifier("memberMybatisMapperServiceImpl")
 	IMemberService service;
 	
-	@GetMapping("memberList-paging")
-	public String memberListpaging(Model model){
+//	@RequestMapping(value = "request", method = RequestMethod.GET)
+//	public String request() {
+//		System.out.println("request");
+//		
+//		return "test/request";
+//		
+//	}
+	
+//	@RequestMapping(value = "get", method = RequestMethod.GET)
+//	public String get(@RequestParam String id) {
+//		System.out.println("getRequst");
+//		System.out.println("id : " + id);
+//		return "test/request";		
+//	}
+	
+	@RequestMapping(value = "memberList-paging", method = RequestMethod.GET)
+	public String memberListpaging(Model model,
+			@RequestParam("pageNum") Integer pageNum){
 		System.out.println("memberList-paging 최초 페이징이 불러짐");
-		int coun = service.totalCount();
-		model.addAttribute("coun",coun);
+		
+		if(pageNum ==0 ) {
+			pageNum = 1;
+		}
+		
+		// 페이지값 초기화
+		int totalCount = service.totalCount(); // 멤버 총인원
+		int listNum = 10;
+		int blockNum = 10;
+		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+		//페이징값 세팅
+		pdto.setPaging();
+//		int totalPage = pdto.getTotalPage();
+//		pageNum = pdto.getPageNum();
+//		listNum = pdto.getListNum();
+//		blockNum = pdto.getBlockNum();
+//		int startPage = pdto.getStartPage();
+//		int endPage = pdto.getEndPage();
+//		int start_rownum = pdto.getStart_rownum();
+//		int end_rownum = pdto.getEnd_rownum();
+//		boolean isPrev = pdto.getIsPrev();
+//		boolean isNext = pdto.getIsNext();
+//		boolean isBPrev = pdto.getIsBPrev();
+//		boolean isBNext = pdto.getIsBNext();
+		
+		// 페이징값 넘기기
+//		model.addAttribute("totalCount",totalCount); // 전체 데이터 값
+//		model.addAttribute("pageNum",pageNum); // 현재 페이지
+//		model.addAttribute("listNum",listNum); // 1페이지당 1다스 숫자
+//		model.addAttribute("blockNum",blockNum); // 몇페이지를 한번에 띄울지
+//		model.addAttribute("totalPage",totalPage); // 전체 페이지 숫자
+//		model.addAttribute("startPage",startPage); // 시작 페이지
+//		model.addAttribute("endPage",endPage); // 마지막 페이지
+//		model.addAttribute("isPrev",isPrev); // 앞 페이지가 있는지 t/f
+//		model.addAttribute("isNext",isNext);  // 다음 페이지가 있는지 t/f
+//		model.addAttribute("isBPrev",isBPrev);  // 앞 10 페이지가 있는지 t/f
+//		model.addAttribute("isBNext",isBNext); // 뒤 10 페이지가 있는지 t/f
+		
+		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		// 있는 페이지 값으로 DB에서 원하는 List값 가져오기
+		List<MemberDTO> list = service.getMemberPaging(pdto);
+		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		
+		
+		
 		view = "membermybatis/memberList-paging";
 		return view;		
 	}
@@ -161,7 +223,20 @@ public class MemberMybatisMapperController{
 //				System.out.println(dto.getEmail());
 //				System.out.println(dto.getPhoneNumber());
 //				System.out.println(dto.getUser_id());
-				int rs = service.insert(dto);		
+				int rs = 0;
+				
+				for(int i=0; i<10; i++) {
+					dto.setUser_id(dto.getUser_id()+i);
+					dto.setPw(dto.getPw()+i);
+					dto.setName(dto.getName()+i);
+					dto.setNickname(dto.getNickname()+i);
+					dto.setEmail(dto.getEmail()+i);
+					dto.setPhoneNumber(dto.getPhoneNumber()+i);
+					
+					rs = service.insert(dto);		
+				}
+				
+				
 				if (rs==1) {
 					
 					view = "redirect:main-mapper";		
