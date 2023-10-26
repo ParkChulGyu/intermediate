@@ -48,18 +48,28 @@
  </form>
 
 <hr>
-
-
-
+<!--  테이블 시작-->
+			<table>
+			<!-- 선택  all 테이블 체크박스 -->
+					<tr><td>
+					<button class="delete">삭제</button>
+					</td>
+					<td>
+					<label for="th_checkAll">전체선택</label>
+	        		<input type="checkbox" id="th_checkAll" onclick="checkAll();">
+					</td></tr>
 			<c:forEach items="${list}" var="MemberDTO">
-					<td>${MemberDTO.user_idx}</td>
-					
-					<td>${MemberDTO.nickname}</td>
+					<tr>
 					<!-- 다른 필드들도 필요에 따라 출력 -->
+					<td><input class="chk"  type="checkbox" name="checkRow" id="${MemberDTO.user_id}" value="${MemberDTO.user_id}"></td>
+					<td>${MemberDTO.user_idx}</td>
+					<td>${MemberDTO.nickname}</td>
+					</tr>
 			</c:forEach>
 			
+			</table>
 		
-			
+			<!-- 페이징 처리값 세팅 -->
 		<div class="pagination">
 		<c:if test="${pdto.isPrev eq true }">
 		<button class="page-btn">
@@ -93,7 +103,68 @@
 		</button>
 		</c:if>
     </div>
-
-
+			<!-- 체크박스 값들 한번에 체크하는 기능-->
+ 
+ <script>
+//체크박스 전체선택, 전체 해체	
+	function checkAll() {
+		if( $("#th_checkAll").is(':checked') ){
+		$("input[name=checkRow]").prop("checked",true);
+		}else{
+			$("input[name=checkRow]").prop("checked",false);
+		}
+	}
+	
+	function deleteAction(){
+		console.log("deleteAction 시작");
+		var cnt = $("input[name='checkRow']:checked").length;
+		let arr= [];
+		var value = $("input[name='checkRow']:checked").val();
+		console.log(value);
+		$("input[name='checkRow']:checked").each(function(index) {
+			   var bChecked = $(this).prop('checked');
+			 // arr.push($(this).attr(value));
+			  var value = $(this).val();
+			   arr.push(value);
+			  
+		});
+		console.log(arr);
+		console.log("deleAc 성공");
+		
+		if(cnt == 0) { alert("선택된 글이 없습니다.");  }
+		else{
+		 console.log("ajax실행");
+		 var user_id = arr;
+		 console.log("id 체크 : " + user_id);
+          $.ajax({
+              // get방식일때만 사용 contentType : 'application/json',
+			//contentType : 'application/json',
+                type: "POST",
+                traditional : true,
+                url: "../membermybatis/memberdelete",
+                data:  {user_id},
+                dataType:"json",
+                success: function(response){
+                	console.log("response 체크 :" + response);
+                    if(response == 1) {  alert("삭제 성공");  
+                    window.location.reload() }
+                    else{ alert("삭제 실패");  } },
+                error: function(){alert("서버통신 오류");}
+                    });
+        } }
+	
+	
+$(function(){ // onload 삭제
+		$('.delete').click( function(){  
+		deleteAction()
+	});	
+});
+	
+	
+	
+	
+ </script>	
+    
+    
 </body>
 </html>
