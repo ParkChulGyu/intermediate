@@ -11,9 +11,9 @@ import com.myweb.dto.PagingDTO;
 @Mapper
 public interface MemberMapper {	
 	
-	public int totalCount() ;
+	public int totalCount(String search) ;
 	
-	public List<MemberDTO> getMemberPaging(PagingDTO dto) ;
+	public List<MemberDTO> getMemberPaging(Map<String, Object> pstr) ;
 	
 	public MemberDTO getMembermapper(MemberDTO dto); 
 

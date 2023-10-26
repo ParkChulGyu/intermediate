@@ -6,18 +6,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.myweb.mybatis.mapper.MemberMapper">
 
 	<!--최초 페이징 -->
-	<select id="totalCount" resultType="int">
+	<select id="totalCount" parameterType="String" resultType="int">
         <![CDATA[
-		select count(*) from user
+		SELECT COUNT(*) FROM user WHERE 1=1
+		AND (nickname LIKE CONCAT('%',#{search},'%')
+		OR name LIKE CONCAT('%',#{search},'%'))
         ]]>
 	</select>
 
 	<!--최초 페이징 에 필요한 맴버값-->
 	<select id="getMemberPaging"
-		parameterType="com.myweb.dto.PagingDTO"
+		parameterType="Map"
 		resultType="com.myweb.dto.MemberDTO">
         <![CDATA[
-        select user_idx , user_id , pw , name , nickname , email, PhoneNumber , sysdate ,point, grade from user 
+        select user_idx , user_id , pw , name , nickname , email, PhoneNumber , sysdate ,point, grade 
+        from user where 1=1
+        AND (nickname LIKE CONCAT('%',#{search},'%')
+		OR name LIKE CONCAT('%',#{search},'%'))
         order by user_idx desc limit #{listNum} offset #{start_rownum}
         ]]>
 	</select>

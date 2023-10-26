@@ -8,8 +8,8 @@ import com.myweb.dto.PagingDTO;
 
 public interface IMemberService {
 	
-	int totalCount() ;
-	public List<MemberDTO> getMemberPaging(PagingDTO dto) ;
+	int totalCount(String search) ;
+	public List<MemberDTO> getMemberPaging(Map<String, Object> pstr) ;
 	List<MemberDTO> getMemberList();
 	MemberDTO getMembermapper(MemberDTO dto);
 	int insert(MemberDTO dto);

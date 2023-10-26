@@ -54,18 +54,39 @@ public class MemberMybatisMapperController{
 //		return "test/request";		
 //	}
 	
-	@RequestMapping(value = "memberList-paging", method = RequestMethod.GET)
-	public String memberListpaging(Model model,
-			@RequestParam("pageNum") Integer pageNum){
-		System.out.println("memberList-paging 최초 페이징이 불러짐");
+	@RequestMapping("memberList-paging")
+	public String memberListpaging(Model model, 
+			@RequestParam Map<String, String> map){
 		
-		if(pageNum ==0 ) {
-			pageNum = 1;
+		System.out.println("memberList-paging 최초 페이징이 불러짐");
+		System.out.println(map); // 현재 맵에 들어있는값 모두
+		System.out.println(map.get("pageNum"));
+		MemberDTO mdto = null;
+		// 검색값 있는지 확인
+		String search = "";
+		if(map.get("slt") != null || map.get("str") != null ) {
+		search = map.get("str"); // 검색 밸류
 		}
 		
-		// 페이지값 초기화
-		int totalCount = service.totalCount(); // 멤버 총인원
+		// 페이지값 확인
+		int pageNum = 1;
+		if(map.get("pageNum") != null ) {
+			pageNum = Integer.parseInt(map.get("pageNum"));
+		}
+		
+		//검색값에 페이지값 세팅
+		if(map.get("str") != null) {
+			model.addAttribute("str",search);
+		}
+		
+		
+		
+		// 페이지값 초기화 |pageNum을 제외한
+		int totalCount = service.totalCount(search); // 멤버 총인원
 		int listNum = 10;
+		if(map.get("listNum")!=null) {
+			listNum = Integer.parseInt(map.get("listNum")); 
+		}
 		int blockNum = 10;
 		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
 		//페이징값 세팅
@@ -99,9 +120,20 @@ public class MemberMybatisMapperController{
 		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
 		
 		// 있는 페이지 값으로 DB에서 원하는 List값 가져오기
-		List<MemberDTO> list = service.getMemberPaging(pdto);
-		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		Map<String, Object> pstr= new HashMap<String, Object>();
 		
+		if(search == null) {
+			search="";
+		}
+			pstr.put("search", search);
+			pstr.put("listNum", pdto.getListNum());
+			pstr.put("start_rownum", pdto.getStart_rownum()-1);
+		
+		
+		List<MemberDTO> list = service.getMemberPaging(pstr);
+//		System.out.println("test"+ list);
+		
+		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
 		
 		
 		
