@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.myweb.dto.MemberDTO;
-import com.myweb.dto.PagingDTO;
 
 @Mapper
 public interface MemberMapper {	

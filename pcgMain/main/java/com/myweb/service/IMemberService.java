@@ -3,9 +3,12 @@ package com.myweb.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.myweb.dto.MemberDTO;
 import com.myweb.dto.PagingDTO;
 
+@Service
 public interface IMemberService {
 	
 	int totalCount(String search) ;

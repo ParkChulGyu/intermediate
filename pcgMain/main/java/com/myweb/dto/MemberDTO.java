@@ -2,8 +2,6 @@ package com.myweb.dto;
 
 import java.util.Date;
 
-import com.google.protobuf.Timestamp;
-
 import lombok.Data;
 
 @Data
