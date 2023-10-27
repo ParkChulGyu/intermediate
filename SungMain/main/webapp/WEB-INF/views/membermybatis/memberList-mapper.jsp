@@ -1,4 +1,4 @@
-<%@page import="java.text.SimpleDateFormat"%>
+pdto<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.myweb.dto.MemberDTO"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -133,8 +133,6 @@
 	
 $(function(){ // onload
 	//삭제
-	     
-
 	
 		$('.delete').click( function(){  
 		deleteAction()

@@ -6,6 +6,9 @@ public class PagingDTO {
 	int blockNum;
 	int pageNum;
 	
+    int start_rownum; 
+    int end_rownum;
+    
 	int totalPage;
 	int startPage;
 	int endPage;
@@ -13,6 +16,11 @@ public class PagingDTO {
 	boolean isNext;
 	boolean isBPrev;
 	boolean isBNext;
+	
+	
+	
+	public PagingDTO() {
+	}
 	
 	public PagingDTO(int totalCount, int pageNum, int listNum, int blockNum) {
 		this.totalCount = totalCount;
@@ -27,10 +35,14 @@ public class PagingDTO {
 		//totalPage = (int)Math.ceil(((totalCount*0.1)/listNum)*10);
 
 		// 시작, 끝 페이지 
-		// 1 ~ 10 => 1, 11 ~ 20 => 11, 21 ~ 30 => 21
 		startPage = ((pageNum-1) / blockNum) * blockNum + 1;
 		endPage = startPage + blockNum -1;
 		if(endPage > totalPage) endPage = totalPage;
+		
+		// 1 ~ 10 => 1, 11 ~ 20 => 11, 21 ~ 30 => 21
+	    start_rownum = (pageNum - 1) * listNum + 1 ;
+	    end_rownum = pageNum * listNum ;
+		
 
 		// isBPrev, isBNext
 		isBPrev = startPage > 1;
@@ -48,6 +60,15 @@ public class PagingDTO {
 	public int getListNum() {
 		return listNum;
 	}
+	
+	public int getStart_rownum() {
+		return start_rownum;
+	}
+	
+	public int getEnd_rownum() {
+		return end_rownum;
+	}
+	
 
 	public int getBlockNum() {
 		return blockNum;
@@ -88,9 +109,12 @@ public class PagingDTO {
 	@Override
 	public String toString() {
 		return "PagingDTO [totalCount=" + totalCount + ", listNum=" + listNum + ", blockNum=" + blockNum + ", pageNum="
-				+ pageNum + ", totalPage=" + totalPage + ", startPage=" + startPage + ", endPage=" + endPage
-				+ ", isPrev=" + isPrev + ", isNext=" + isNext + ", isBPrev=" + isBPrev + ", isBNext=" + isBNext + "]";
+				+ pageNum + ", start_rownum=" + start_rownum + ", end_rownum=" + end_rownum + ", totalPage=" + totalPage
+				+ ", startPage=" + startPage + ", endPage=" + endPage + ", isPrev=" + isPrev + ", isNext=" + isNext
+				+ ", isBPrev=" + isBPrev + ", isBNext=" + isBNext + "]";
 	}
+
+	
 	
 	
 }

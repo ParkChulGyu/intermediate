@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 import com.myweb.dto.MemberDTO;
+import com.myweb.dto.PagingDTO;
 import com.myweb.service.IMemberService;
 
 
@@ -37,7 +39,109 @@ public class MemberMybatisMapperController{
 	@Qualifier("memberMybatisMapperServiceImpl")
 	IMemberService service;
 	
+//	@RequestMapping(value = "request", method = RequestMethod.GET)
+//	public String request() {
+//		System.out.println("request");
+//		
+//		return "test/request";
+//		
+//	}
+	
+//	@RequestMapping(value = "get", method = RequestMethod.GET)
+//	public String get(@RequestParam String id) {
+//		System.out.println("getRequst");
+//		System.out.println("id : " + id);
+//		return "test/request";		
+//	}
+	
+	@RequestMapping("memberList-paging")
+	public String memberListpaging(Model model, 
+			@RequestParam Map<String, String> map){
 		
+		System.out.println("memberList-paging 최초 페이징이 불러짐");
+		System.out.println(map); // 현재 맵에 들어있는값 모두
+		System.out.println(map.get("pageNum"));
+		MemberDTO mdto = null;
+		// 검색값 있는지 확인
+		String search = "";
+		if(map.get("slt") != null || map.get("str") != null ) {
+		search = map.get("str"); // 검색 밸류
+		}
+		
+		// 페이지값 확인
+		int pageNum = 1;
+		if(map.get("pageNum") != null ) {
+			pageNum = Integer.parseInt(map.get("pageNum"));
+		}
+		
+		//검색값에 페이지값 세팅
+		if(map.get("str") != null) {
+			model.addAttribute("str",search);
+		}
+		
+		
+		
+		// 페이지값 초기화 |pageNum을 제외한
+		int totalCount = service.totalCount(search); // 멤버 총인원
+		int listNum = 10;
+		if(map.get("listNum")!=null) {
+			listNum = Integer.parseInt(map.get("listNum")); 
+		}
+		int blockNum = 10;
+		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+		//페이징값 세팅
+		pdto.setPaging();
+//		int totalPage = pdto.getTotalPage();
+//		pageNum = pdto.getPageNum();
+//		listNum = pdto.getListNum();
+//		blockNum = pdto.getBlockNum();
+//		int startPage = pdto.getStartPage();
+//		int endPage = pdto.getEndPage();
+//		int start_rownum = pdto.getStart_rownum();
+//		int end_rownum = pdto.getEnd_rownum();
+//		boolean isPrev = pdto.getIsPrev();
+//		boolean isNext = pdto.getIsNext();
+//		boolean isBPrev = pdto.getIsBPrev();
+//		boolean isBNext = pdto.getIsBNext();
+		
+		// 페이징값 넘기기
+//		model.addAttribute("totalCount",totalCount); // 전체 데이터 값
+//		model.addAttribute("pageNum",pageNum); // 현재 페이지
+//		model.addAttribute("listNum",listNum); // 1페이지당 1다스 숫자
+//		model.addAttribute("blockNum",blockNum); // 몇페이지를 한번에 띄울지
+//		model.addAttribute("totalPage",totalPage); // 전체 페이지 숫자
+//		model.addAttribute("startPage",startPage); // 시작 페이지
+//		model.addAttribute("endPage",endPage); // 마지막 페이지
+//		model.addAttribute("isPrev",isPrev); // 앞 페이지가 있는지 t/f
+//		model.addAttribute("isNext",isNext);  // 다음 페이지가 있는지 t/f
+//		model.addAttribute("isBPrev",isBPrev);  // 앞 10 페이지가 있는지 t/f
+//		model.addAttribute("isBNext",isBNext); // 뒤 10 페이지가 있는지 t/f
+		
+		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		// 있는 페이지 값으로 DB에서 원하는 List값 가져오기
+		Map<String, Object> pstr= new HashMap<String, Object>();
+		
+		if(search == null) {
+			search="";
+		}
+			pstr.put("search", search);
+			pstr.put("listNum", pdto.getListNum());
+			pstr.put("start_rownum", pdto.getStart_rownum()-1);
+		
+		
+		List<MemberDTO> list = service.getMemberPaging(pstr);
+//		System.out.println("test"+ list);
+		
+		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		
+		
+		view = "membermybatis/memberList-paging";
+		return view;		
+	}
+	
+			
 	@GetMapping("main-mapper")
 	public String mainInteface() {
 		System.out.println("main-mapper");		
@@ -59,6 +163,8 @@ public class MemberMybatisMapperController{
 		return view;		
 		
 	}
+	
+	
 
 	@ResponseBody
 	@PostMapping(value = "memberdelete")
@@ -106,69 +212,74 @@ public class MemberMybatisMapperController{
 		return view;		
 	}
 	//회원가입
-	 @ResponseBody
-	@PostMapping(value = "idCheckReal")
-	public int idCheck(String user_id) throws Exception{
-				int result = service.idCheck(user_id);
-				
-				return result;
-		
-	}
-	@ResponseBody
-	@PostMapping(value = "nameCheckReal")
-	public int nameCheck(String name) throws Exception{
-	
-				int result = service.nameCheck(name);
-				return result;
-		
-	}
+//	 @ResponseBody
+//	@PostMapping(value = "idCheckReal")
+//	public int idCheck(String user_id) throws Exception{
+//				int result = service.idCheck(user_id);
+//				
+//				return result;
+//		
+//	}
+//	@ResponseBody
+//	@PostMapping(value = "nameCheckReal")
+//	public int nameCheck(String name) throws Exception{
+//	
+//				int result = service.nameCheck(name);
+//				return result;
+//		
+//	}
 	
 	//회원가입
+	@ResponseBody
 	@PostMapping(value = "joinP")
-	public String joinAction(HttpServletResponse response,MemberDTO dto, RedirectAttributes ra,String name,String user_id, String pw2 ) throws Exception {
+	public int joinAction(MemberDTO dto) throws Exception {
 		
-			int idResult = service.idCheck(user_id);
-			int nameResult = service.idCheck(name);
 		
-			PrintWriter out = response.getWriter();
-			response.setContentType("text/html; charset=UTF-8");
-			
-			
-			if(dto.getPw().equals(pw2)) {
-				
-			
-			if(idResult == 1 || nameResult == 1) {
-				view = "redirect:join-mapper";
+			System.out.println("memberDTO" +  dto);
 				
 				
-				out.println("<script>alert('회원가입에 실패하셨습니다'); location.href='/web/membermybatis/join-mapper';</script>");
 				
-				//out.flush();
-			}else if(idResult == 0 && nameResult == 0){
-				System.out.println(dto.getNickname());
-				System.out.println(dto.getEmail());
-				System.out.println(dto.getPhoneNumber());
-				System.out.println(dto.getUser_id());
-				int rs = service.insert(dto);		
-				if (rs==1) {
+				
+					dto.setUser_id(dto.getUser_id());
+					dto.setPw(dto.getPw());
+					dto.setName(dto.getName());
+					dto.setNickname(dto.getNickname());
+					dto.setEmail(dto.getEmail());
+					dto.setPhoneNumber(dto.getPhoneNumber());
 					
-					view = "redirect:main-mapper";		
-					
-					
-					out.println("<script>alert('계정이 등록 되었습니다'); location.href='/web/membermybatis/main-mapper';</script>");
-					
-					out.flush();
-					}
-					
-			}
-
-				}else {
-					out.println("<script>alert('비밀번호가 일치하지 않습니다');window.history.back();</script>");
-					out.flush();
-					
-				}
-			return view;		
+					System.out.println("memberDTO2" +  dto);
+					int result = service.insert(dto);		
+				
+				System.out.println("result 확인 " + result);
+				
+				return result;		
 	}
+					
+			
+
+				
+	
+	@ResponseBody
+	@PostMapping(value = "getMemberdata")
+	public int getMemberdata(String user_id, MemberDTO dto) throws Exception{
+				int rs=0;
+					dto.setUser_id(user_id);
+				dto = service.getMembermapper(dto);
+			
+				if(dto != null) {
+					rs = 1;
+				}
+				return rs;
+				
+				
+	} 
+		
+	
+	
+	
+	
+	
+	
 	
 	//로그인
 	@GetMapping("login-mapper")

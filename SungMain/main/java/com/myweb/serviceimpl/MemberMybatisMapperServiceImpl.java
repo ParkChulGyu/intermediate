@@ -1,11 +1,13 @@
 package com.myweb.serviceimpl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myweb.dto.MemberDTO;
+import com.myweb.dto.PagingDTO;
 import com.myweb.mybatis.mapper.MemberMapper;
 import com.myweb.service.IMemberService;
 
@@ -16,20 +18,27 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 	MemberMapper dao;
 
 	@Override
+	public int totalCount(String search) {
+		return dao.totalCount(search);
+	} 
+	
+	public List<MemberDTO> getMemberPaging(Map<String, Object> pstr){
+		return dao.getMemberPaging(pstr);
+	} 
+	
+	@Override
 	public List<MemberDTO> getMemberList() {
-		
-		
 		return dao.getMemberList();
 	}
 
 	@Override
 	public MemberDTO getMembermapper(MemberDTO dto) {
-		
 		return dao.getMembermapper(dto);
 	}
+	
 		//사용중
 	@Override
-	public int insert(MemberDTO dto) {
+	public int insert(MemberDTO dto)  throws Exception{
 		return dao.insert(dto);
 	}
 

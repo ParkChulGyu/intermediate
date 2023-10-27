@@ -5,6 +5,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.myweb.mybatis.mapper.MemberMapper">
 
+	<!--최초 페이징 -->
+	<select id="totalCount" parameterType="String" resultType="int">
+        <![CDATA[
+		SELECT COUNT(*) FROM user WHERE 1=1
+		AND (nickname LIKE CONCAT('%',#{search},'%')
+		OR name LIKE CONCAT('%',#{search},'%'))
+        ]]>
+	</select>
+
+	<!--최초 페이징 에 필요한 맴버값-->
+	<select id="getMemberPaging"
+		parameterType="Map"
+		resultType="com.myweb.dto.MemberDTO">
+        <![CDATA[
+        select user_idx , user_id , pw , name , nickname , email, PhoneNumber , sysdate ,point, grade 
+        from user where 1=1
+        AND (nickname LIKE CONCAT('%',#{search},'%')
+		OR name LIKE CONCAT('%',#{search},'%'))
+        order by user_idx desc limit #{listNum} offset #{start_rownum}
+        ]]>
+	</select>
 
 
 
@@ -23,16 +44,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <![CDATA[
         
         select user_idx, user_id, pw, name, nickname, email, PhoneNumber, sysdate, point, grade
-        from user 
-        order by user_idx desc 
+        from user order by user_idx desc 
         ]]>
 
 	</select>
 	<insert id="insert" parameterType="com.myweb.dto.MemberDTO">
         <![CDATA[
-		INSERT INTO user (user_id, pw, name, nickname, email, PhoneNumber,grade)
+		INSERT INTO user (user_id, pw, name, nickname, email, PhoneNumber)
 		VALUES ( #{user_id} , #{pw }, #{name },#{nickname }, #{email },
-		#{PhoneNumber } , #{grade });
+		#{PhoneNumber });
         ]]>
 	</insert>
 
@@ -43,17 +63,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE user
 		SET
 		pw = #{pw},
-		name = #{name},
+		name
+		= #{name},
 		nickname = #{nickname},
 		email = #{email},
-		PhoneNumber = #{PhoneNumber}
+		PhoneNumber =
+		#{PhoneNumber}
 		WHERE
 		user_id = #{user_id};
 	</update>
 
 	<delete id="delete" parameterType="com.myweb.dto.MemberDTO">
 		delete from user
-		where user_id = #{user_id}
+		where user_id
+		= #{user_id}
 	</delete>
 
 	<delete id="deleteMember"
