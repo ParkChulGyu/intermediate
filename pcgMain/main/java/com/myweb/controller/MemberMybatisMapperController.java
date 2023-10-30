@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -212,82 +213,118 @@ public class MemberMybatisMapperController{
 		return view;		
 	}
 	//회원가입
-	 @ResponseBody
-	@PostMapping(value = "idCheckReal")
-	public int idCheck(String user_id) throws Exception{
-				int result = service.idCheck(user_id);
-				
-				return result;
-		
-	}
-	@ResponseBody
-	@PostMapping(value = "nameCheckReal")
-	public int nameCheck(String name) throws Exception{
+//	 @ResponseBody
+//	@PostMapping(value = "idCheckReal")
+//	public int idCheck(String user_id) throws Exception{
+//				int result = service.idCheck(user_id);
+//				
+//				return result;
+//		
+//	}
+//	@ResponseBody
+//	@PostMapping(value = "nameCheckReal")
+//	public int nameCheck(String name) throws Exception{
+//	
+//				int result = service.nameCheck(name);
+//				return result;
+//		
+//	}
 	
-				int result = service.nameCheck(name);
-				return result;
-		
+	
+	@RequestMapping(value = "/checkid", method = {RequestMethod.GET})
+	public @ResponseBody int idCheck(String mId) throws Exception {
+		String user_id = mId;
+		if(user_id == null || user_id == "")
+			return -1;
+		else
+		return service.checkId(user_id);
 	}
 	
-	//회원가입
-	@PostMapping(value = "joinP")
-	public String joinAction(HttpServletResponse response,MemberDTO dto, RedirectAttributes ra,String name,String user_id, String pw2 ) throws Exception {
-		
-			int idResult = service.idCheck(user_id);
-			int nameResult = service.idCheck(name);
-		
-			PrintWriter out = response.getWriter();
-			response.setContentType("text/html; charset=UTF-8");
-			
-			
-			if(dto.getPw().equals(pw2)) {
-				
-			
-			if(idResult == 1 || nameResult == 1) {
-				view = "redirect:join-mapper";
-				
-				
-				out.println("<script>alert('회원가입에 실패하셨습니다'); location.href='/web/membermybatis/join-mapper';</script>");
-				
-				//out.flush();
-			}else if(idResult == 0 && nameResult == 0){
-//				System.out.println(dto.getNickname());
-//				System.out.println(dto.getEmail());
-//				System.out.println(dto.getPhoneNumber());
-//				System.out.println(dto.getUser_id());
-				int rs = 0;
-				
-				for(int i=0; i<10; i++) {
-					dto.setUser_id(dto.getUser_id()+i);
-					dto.setPw(dto.getPw()+i);
-					dto.setName(dto.getName()+i);
-					dto.setNickname(dto.getNickname()+i);
-					dto.setEmail(dto.getEmail()+i);
-					dto.setPhoneNumber(dto.getPhoneNumber()+i);
-					
-					rs = service.insert(dto);		
-				}
-				
-				
-				if (rs==1) {
-					
-					view = "redirect:main-mapper";		
-					
-					
-					out.println("<script>alert('계정이 등록 되었습니다'); location.href='/web/membermybatis/main-mapper';</script>");
-					
-					out.flush();
-					}
-					
-			}
+	
+	
+	@PostMapping("signup")
+	public void insertMember(HttpServletRequest request, HttpServletResponse response, MemberDTO dto) throws Exception {
 
-				}else {
-					out.println("<script>alert('비밀번호가 일치하지 않습니다');window.history.back();</script>");
-					out.flush();
-					
-				}
-			return view;		
+		
+		
+		//생년월일 구하기 ( 10보다 작으면 앞에 0 붙이기)
+		String years = request.getParameter("years"); //년도
+		String month =request.getParameter("month"); //월
+		String	day = request.getParameter("day");  //일
+		
+		String user_id = request.getParameter("mId"); //아이디
+		System.out.println("mid 체크 : " + user_id );
+		String pw = request.getParameter("mPwd"); //비밀번호
+		String name = request.getParameter("mName"); //이름
+		String nickname = request.getParameter("mNickName"); //닉네임
+		String email = request.getParameter("mEmail"); //닉네임
+		String birth = years +"년" + month +"월" + day+"일"; // 년 월 일 합친 생년월일.
+		String PhoneNumber = request.getParameter("mTel"); // 전화번호
+		
+		dto.setUser_id(user_id);
+		dto.setPw(pw);
+		dto.setName(name);
+		dto.setNickname(nickname);
+		dto.setEmail(email);
+		dto.setPhoneNumber(PhoneNumber);
+		dto.setBirth(birth);
+		// 회원 정보들 세팅
+		//this.mNum = mNum; this.mPwd = mPwd; ... mRole=mRole; 
+		int rowcount = service.insertmember(dto); // 세팅해둔 dto객체를 넣었다.
+		
+		
+		
+		
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html; charset=UTF-8");
+
+		if(rowcount > 0) { //값이 데이터베이스에 저장이 되었을 때
+			
+			
+			out.println("<script>alert('계정이 등록 되었습니다'); location.href='/web/membermybatis/main-mapper';</script>");
+			
+			out.flush();
+		}else if(rowcount == 0) {
+			
+			out.println("<script>alert('회원가입에 실패하셨습니다'); location.href='/web/membermybatis/join-mapper';</script>");
+			out.flush();
+		}
+		
 	}
+	
+	
+	
+	
+					
+			
+
+				
+	
+	@ResponseBody
+	@PostMapping(value = "getMemberdata")
+	public int getMemberdata(String user_id, MemberDTO dto) throws Exception{
+				
+						System.out.println("user_id : "  + user_id);
+				int rs=0;
+				if(!(user_id.equals(""))) {
+					dto.setUser_id(user_id);
+				dto = service.getMembermapper(dto);
+			
+				if(dto != null) {
+					rs = 1;
+				}
+				}
+				return rs;
+				
+				
+	} 
+		
+	
+	
+	
+	
+	
+	
 	
 	//로그인
 	@GetMapping("login-mapper")

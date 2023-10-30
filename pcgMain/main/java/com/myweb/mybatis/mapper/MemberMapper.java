@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.myweb.dto.MemberDTO;
+import com.myweb.dto.PagingDTO;
 
 @Mapper
 public interface MemberMapper {	
@@ -14,11 +15,11 @@ public interface MemberMapper {
 	
 	public List<MemberDTO> getMemberPaging(Map<String, Object> pstr) ;
 	
-	public MemberDTO getMembermapper(MemberDTO dto); 
+	public MemberDTO getMembermapper(MemberDTO dto) ; 
 
 	public List<MemberDTO> getMemberList();	
 	
-	public int insert(MemberDTO dto);
+	public int insertmember(MemberDTO dto)  throws Exception;
 	
 	public int update(MemberDTO dto);
 	
@@ -28,7 +29,7 @@ public interface MemberMapper {
 
 	public int nameCheck(String name) throws Exception;
 
-	public int idCheck(String user_id) throws Exception;
+	public int checkId(String user_id) throws Exception;
 
 	
 	

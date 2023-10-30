@@ -27,5 +27,7 @@
 	
 	<annotation-driven />
 	
+	<resources mapping="/resources/**" location="/resources/" />
+	
 	
 </beans:beans>

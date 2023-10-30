@@ -9,7 +9,7 @@ import com.myweb.dto.TestDTO;
 import com.myweb.mybatis.mapper.TestMapper;
 import com.myweb.service.ITestService;
 
-@Service
+@Service("TestMybatisMapperServiceImpl")
 public class TestMybatisMapperServiceImpl implements ITestService{
 	
 	@Autowired

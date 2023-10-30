@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
+import com.myweb.dto.ImgDTO;
 import com.myweb.dto.MemberDTO;
 import com.myweb.dto.PagingDTO;
 import com.myweb.dto.TestDTO;
+import com.myweb.service.IImgService;
 import com.myweb.service.IMemberService;
 import com.myweb.service.ITestService;
 
@@ -41,6 +43,9 @@ public class TestMybatisMapperController{
 	@Qualifier("TestMybatisMapperServiceImpl")
 	ITestService service;
 	
+	@Autowired
+	@Qualifier("ImgMybatisMapperServiceImpl")
+	IImgService servicefile;
 //	@RequestMapping(value = "request", method = RequestMethod.GET)
 //	public String request() {
 //		System.out.println("request");
@@ -60,7 +65,7 @@ public class TestMybatisMapperController{
 	public String memberListpaging(Model model, 
 			@RequestParam Map<String, String> map){
 		
-		System.out.println("response 최초 페이징이 불러짐");
+		System.out.println("response이 최초 불러짐");
 		System.out.println(map); // 현재 맵에 들어있는값 모두
 		TestDTO tdto = null;
 		Map<String, Object> pstr= new HashMap<String, Object>();
@@ -69,6 +74,17 @@ public class TestMybatisMapperController{
 		
 		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 TestList값을 가져온다.
 		
+		System.out.println(list.get(0).getName());
+		
+		String name = list.get(0).getName();
+		
+		List<ImgDTO> flist =  servicefile.getImgList(name);
+		
+		System.out.println("파일 이름명 : "+flist);
+		
+		model.addAttribute("flist",flist); 
+		
+		System.out.println(model);
 		view = "test/response";
 		return view;		
 	}

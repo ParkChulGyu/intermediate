@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.myweb.dto.TestDTO;
 
-@Service
 public interface ITestService {
 
 	List<TestDTO> getTestList();

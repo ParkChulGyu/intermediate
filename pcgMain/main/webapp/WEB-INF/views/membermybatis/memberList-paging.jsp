@@ -13,10 +13,8 @@
 </head>
 <body>
 <!-- 탑메뉴 넣기-->
-<%@include file="submenu.jsp" %>
 
 <h2>페이징 값 확인</h2>
-
 <hr>
 <p>Total Count: <c:out value="${pdto.totalCount}" /></p>
 <p>page	 Num: <c:out value="${pdto.pageNum}" /></p>

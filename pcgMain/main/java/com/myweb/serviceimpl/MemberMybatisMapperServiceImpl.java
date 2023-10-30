@@ -38,8 +38,8 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 	
 		//사용중
 	@Override
-	public int insert(MemberDTO dto) {
-		return dao.insert(dto);
+	public int insertmember(MemberDTO dto)  throws Exception{
+		return dao.insertmember(dto);
 	}
 
 	@Override
@@ -65,9 +65,9 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 	}
 
 	@Override
-	public int idCheck(String user_id) throws Exception {
+	public int checkId(String user_id) throws Exception {
 		
-		return dao.idCheck(user_id);
+		return dao.checkId(user_id);
 	}
 
 

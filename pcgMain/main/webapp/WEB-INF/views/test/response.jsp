@@ -1,8 +1,7 @@
-<%@page import="java.util.List"%>
-<%@page import="com.myweb.dto.TestDTO"%>
 <%@page import="com.myweb.dto.MemberDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +12,9 @@
 <%@include file="../topmenu.jsp" %>
 <h1>RESPONSE</h1>
 <h2>
+
+<img src="${pageContext.request.contextPath}/resources/img/가야성_1_공공3유형.jpg" />
+
 
 </h2>
 </body>
