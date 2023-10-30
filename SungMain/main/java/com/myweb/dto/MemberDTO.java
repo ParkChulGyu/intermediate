@@ -19,6 +19,7 @@ public class MemberDTO{
 	private Date sysdate ;
 	private int point;
 	private String grade;
+	private String birth;
 	
 }
 

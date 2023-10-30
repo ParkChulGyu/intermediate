@@ -19,7 +19,7 @@ public interface MemberMapper {
 
 	public List<MemberDTO> getMemberList();	
 	
-	public int insert(MemberDTO dto)  throws Exception;
+	public int insertmember(MemberDTO dto)  throws Exception;
 	
 	public int update(MemberDTO dto);
 	
@@ -29,7 +29,7 @@ public interface MemberMapper {
 
 	public int nameCheck(String name) throws Exception;
 
-	public int idCheck(String user_id) throws Exception;
+	public int checkId(String user_id) throws Exception;
 
 	
 	

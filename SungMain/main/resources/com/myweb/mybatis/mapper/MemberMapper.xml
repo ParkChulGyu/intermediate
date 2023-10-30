@@ -48,11 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ]]>
 
 	</select>
-	<insert id="insert" parameterType="com.myweb.dto.MemberDTO">
+	<insert id="insertmember" parameterType="com.myweb.dto.MemberDTO">
         <![CDATA[
-		INSERT INTO user (user_id, pw, name, nickname, email, PhoneNumber)
+		INSERT INTO user (user_id, pw, name, nickname, email, PhoneNumber, birth)
 		VALUES ( #{user_id} , #{pw }, #{name },#{nickname }, #{email },
-		#{PhoneNumber });
+		#{PhoneNumber },#{birth } );
         ]]>
 	</insert>
 
@@ -93,7 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where name= #{name}
 	</select>
 
-	<select id="idCheck" parameterType="com.myweb.dto.MemberDTO"
+	<select id="checkId" parameterType="com.myweb.dto.MemberDTO"
 		resultType="int">
 		select count(*) from user
 		where user_id= #{user_id}

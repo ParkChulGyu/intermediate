@@ -20,6 +20,7 @@
 
 <% if (session.getAttribute("user_id") == null) { %>
 <a href="join-mapper">회원가입</a> |
+<a href="joindo">회원가입 트라이</a> |
 <a href="login-mapper">로그인</a> |
 <% } else { %>	
 	<a href="update-mapper">정보수정</a> |
