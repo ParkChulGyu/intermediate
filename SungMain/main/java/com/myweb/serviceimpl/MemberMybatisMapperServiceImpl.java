@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myweb.dto.MemberDTO;
-import com.myweb.dto.PagingDTO;
 import com.myweb.mybatis.mapper.MemberMapper;
 import com.myweb.service.IMemberService;
 
@@ -59,6 +58,16 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 		return dao.deleteMember(dto);
 	}
 	
+	@Override
+	public String idfind(String email) throws Exception {
+		return dao.idfind(email);
+	}
+
+	@Override
+	public int idfindcount(String email) throws Exception {
+		return dao.nameCheck(email);
+	}
+
 	@Override
 	public int nameCheck(String name) throws Exception {
 		return dao.nameCheck(name);

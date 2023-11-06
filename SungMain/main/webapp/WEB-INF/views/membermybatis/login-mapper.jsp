@@ -22,7 +22,21 @@ rs:<%=request.getAttribute("rs") %>
 		<div>
 		<input type="submit" value="Submit">
 		</div>
+		<a href ="idfind">아이디 찾기</a>
+		
+		
+		
 </form>
+
+
+
+
+
+
+
+
+
+
 <a href="javascript:kakaoLogin();"><img src="https://www.gb.go.kr/Main/Images/ko/member/certi_kakao_login.png"style="width: 208px; height: auto;"></a>
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>

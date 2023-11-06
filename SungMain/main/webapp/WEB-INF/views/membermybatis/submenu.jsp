@@ -27,7 +27,7 @@
 	<a href="#" onclick="deleteConfirm();">회원탈퇴</a> |
 	<a href="logout-mapper">로그아웃</a> | <br>
 
-<%=session.getAttribute("name") %>(<%=session.getAttribute("user_id") %>) 로그인 중
+<%=session.getAttribute("nickname") %>(<%=session.getAttribute("user_id") %>) 로그인 중
 <% } %>
 
 </h2>

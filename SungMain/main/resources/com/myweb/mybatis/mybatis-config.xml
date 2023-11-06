@@ -7,6 +7,7 @@
   <typeAliases>
   	<typeAlias type="com.myweb.dto.MemberDTO" alias="memberDTO"/>
   	<typeAlias type="com.myweb.dto.PagingDTO" alias="PagingDTO"/>
+  	<typeAlias type="com.myweb.dto.AdminNoticeDTO" alias="AdminNoticeDTO"/>
   </typeAliases>
 
   

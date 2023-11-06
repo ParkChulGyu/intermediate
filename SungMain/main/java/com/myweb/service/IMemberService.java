@@ -10,7 +10,7 @@ import com.myweb.dto.PagingDTO;
 
 
 
-@Service
+
 public interface IMemberService {
 	
 	int totalCount(String search) ;
@@ -21,6 +21,8 @@ public interface IMemberService {
 	int update(MemberDTO dto);
 	int delete(MemberDTO dto);
 	int deleteMember(MemberDTO dto) throws Exception;
+	String idfind(String email) throws Exception;
+	int idfindcount(String email) throws Exception;
 	int nameCheck(String name) throws Exception;
 	int checkId(String user_id) throws Exception;
 

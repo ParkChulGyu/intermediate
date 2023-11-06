@@ -12,6 +12,7 @@
 <title>memberList.jsp</title>
 </head>
 <body>
+<%@include file="../topmenu.jsp" %>
 <!-- 탑메뉴 넣기-->
 
 <h2>페이징 값 확인</h2>

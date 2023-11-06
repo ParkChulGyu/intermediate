@@ -1,9 +1,6 @@
 package com.myweb.controller;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 import com.myweb.dto.MemberDTO;
 import com.myweb.dto.PagingDTO;
 import com.myweb.service.IMemberService;
@@ -40,20 +35,7 @@ public class MemberMybatisMapperController{
 	@Qualifier("memberMybatisMapperServiceImpl")
 	IMemberService service;
 	
-//	@RequestMapping(value = "request", method = RequestMethod.GET)
-//	public String request() {
-//		System.out.println("request");
-//		
-//		return "test/request";
-//		
-//	}
-	
-//	@RequestMapping(value = "get", method = RequestMethod.GET)
-//	public String get(@RequestParam String id) {
-//		System.out.println("getRequst");
-//		System.out.println("id : " + id);
-//		return "test/request";		
-//	}
+
 	
 	@RequestMapping("memberList-paging")
 	public String memberListpaging(Model model, 
@@ -62,7 +44,8 @@ public class MemberMybatisMapperController{
 		System.out.println("memberList-paging 최초 페이징이 불러짐");
 		System.out.println(map); // 현재 맵에 들어있는값 모두
 		System.out.println(map.get("pageNum"));
-		MemberDTO mdto = null;
+		System.out.println("체크하자 체크" +map.get("pageNum"));
+
 		// 검색값 있는지 확인
 		String search = "";
 		if(map.get("slt") != null || map.get("str") != null ) {
@@ -92,31 +75,7 @@ public class MemberMybatisMapperController{
 		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
 		//페이징값 세팅
 		pdto.setPaging();
-//		int totalPage = pdto.getTotalPage();
-//		pageNum = pdto.getPageNum();
-//		listNum = pdto.getListNum();
-//		blockNum = pdto.getBlockNum();
-//		int startPage = pdto.getStartPage();
-//		int endPage = pdto.getEndPage();
-//		int start_rownum = pdto.getStart_rownum();
-//		int end_rownum = pdto.getEnd_rownum();
-//		boolean isPrev = pdto.getIsPrev();
-//		boolean isNext = pdto.getIsNext();
-//		boolean isBPrev = pdto.getIsBPrev();
-//		boolean isBNext = pdto.getIsBNext();
-		
-		// 페이징값 넘기기
-//		model.addAttribute("totalCount",totalCount); // 전체 데이터 값
-//		model.addAttribute("pageNum",pageNum); // 현재 페이지
-//		model.addAttribute("listNum",listNum); // 1페이지당 1다스 숫자
-//		model.addAttribute("blockNum",blockNum); // 몇페이지를 한번에 띄울지
-//		model.addAttribute("totalPage",totalPage); // 전체 페이지 숫자
-//		model.addAttribute("startPage",startPage); // 시작 페이지
-//		model.addAttribute("endPage",endPage); // 마지막 페이지
-//		model.addAttribute("isPrev",isPrev); // 앞 페이지가 있는지 t/f
-//		model.addAttribute("isNext",isNext);  // 다음 페이지가 있는지 t/f
-//		model.addAttribute("isBPrev",isBPrev);  // 앞 10 페이지가 있는지 t/f
-//		model.addAttribute("isBNext",isBNext); // 뒤 10 페이지가 있는지 t/f
+
 		
 		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
 		
@@ -132,7 +91,6 @@ public class MemberMybatisMapperController{
 		
 		
 		List<MemberDTO> list = service.getMemberPaging(pstr);
-//		System.out.println("test"+ list);
 		
 		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
 		
@@ -170,20 +128,7 @@ public class MemberMybatisMapperController{
 	@ResponseBody
 	@PostMapping(value = "memberdelete")
 	public int memberdelete(String[] user_id ,MemberDTO dto)  throws Exception {
-//		Map<String, Object> resultMap = new HashMap<>();
-//	    
-//	    List<Integer> results = new ArrayList<>();
-//	    for (int i = 0; i < user_id.length; i++) {
-//	        dto.setUser_id(user_id[i]);
-//	        System.out.println("dto 체크해보자 : " + dto);
-//	        int result = service.deleteMember(dto);
-//	        results.add(result);
-//	        System.out.println("result 확인 : " + result);
-//	    }
-//	    
-//	    resultMap.put("results", results);
-//	    return resultMap;
-//	}
+
 		
 		
 		
@@ -212,23 +157,7 @@ public class MemberMybatisMapperController{
 		
 		return view;		
 	}
-	//회원가입
-//	 @ResponseBody
-//	@PostMapping(value = "idCheckReal")
-//	public int idCheck(String user_id) throws Exception{
-//				int result = service.idCheck(user_id);
-//				
-//				return result;
-//		
-//	}
-//	@ResponseBody
-//	@PostMapping(value = "nameCheckReal")
-//	public int nameCheck(String name) throws Exception{
-//	
-//				int result = service.nameCheck(name);
-//				return result;
-//		
-//	}
+
 	
 	
 	@RequestMapping(value = "/checkid", method = {RequestMethod.GET})
@@ -348,7 +277,7 @@ public class MemberMybatisMapperController{
 			if (dto.getPw().equals(pw)) {
 				
 				session.setAttribute("user_id", user_id);
-				session.setAttribute("name", dto.getName());
+				session.setAttribute("nickname", dto.getNickname());
 				
 				view = "redirect:main-mapper";
 			}
@@ -356,6 +285,46 @@ public class MemberMybatisMapperController{
 		
 		return view;		
 	}
+	
+	@GetMapping("idfind")
+	public String idfind() {
+		
+		view = "membermybatis/idfind";		
+		
+		return view;	
+	}
+	@PostMapping("idfindP")
+	public String idfindP(String str_email01,String str_email02,Model model) throws Exception {
+		
+		System.out.println(str_email01+"@"+str_email02);
+		
+		String email = str_email01+"@"+str_email02;
+		
+		
+		String user_id = service.idfind(email);
+		
+		if (user_id == null) {
+			model.addAttribute("msg", "이메일을 확인해주세요");
+			view = "membermybatis/idfind";
+		}else {
+		
+		
+		
+		model.addAttribute("msg", "당신의 아이디는 :" + user_id + " 입니다");
+		view = "membermybatis/idfind";		
+		}		
+		
+	
+		return view;	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	@GetMapping("update-mapper")
 	public String update(Model model, HttpSession session) {
 		

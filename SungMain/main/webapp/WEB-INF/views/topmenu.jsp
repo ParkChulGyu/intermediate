@@ -9,5 +9,10 @@ String contextPath = request.getContextPath();
 <a href="<%=contextPath %>/membermybatis/main-mapper">Member-Mybatis-Mapper</a> |
 <a href="<%=contextPath %>/membermybatis/memberList-paging">Member-Mybatis-memberList-paging</a> |
 
+
+<a href="<%=contextPath %>/adminnotice/adminlist">admin list</a> |
+
+
+
 </h2>
 <hr>
