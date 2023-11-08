@@ -87,6 +87,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
+	<select id="idfind" parameterType="String"
+		resultType="String">
+		select user_id from user where email=#{email}
+		
+	</select>
+	
+	<select id="idfindcount" parameterType="String"
+		resultType="int">
+		select count(*) from user
+		where email= #{email}
+	</select>
+
 	<select id="nameCheck" parameterType="com.myweb.dto.MemberDTO"
 		resultType="int">
 		select count(*) from user
@@ -98,6 +110,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from user
 		where user_id= #{user_id}
 	</select>
+
+
+	
+
+
+
 
 
 </mapper>

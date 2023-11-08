@@ -12,10 +12,23 @@ MemberDTO dto = (MemberDTO)request.getAttribute("dto");
 <head>
 <meta charset="UTF-8">
 <title>update.jsp</title>
+<script>
+	function deleteConfirm() {
+		const input = confirm("회원을 탈퇴할까요?");
+		alert(input);
+		if (input) location.href = "delete-mapper";
+		else return;
+	};
+	
+</script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
 </head>
 <body>
 <%@include file="submenu.jsp" %>
 <h2>회원정보수정</h2>
+
+
+
 <hr>
 <form action="updateP" method="post">
 	<table border="1">
@@ -26,20 +39,12 @@ MemberDTO dto = (MemberDTO)request.getAttribute("dto");
       	<tr><th>email</th><td><input type="text" name="email" value="<%=dto.getEmail()%>"></td></tr>
       	<tr><th>PhoneNumber</th><td><input type="text" name="PhoneNumber" value="<%=dto.getPhoneNumber()%>"></td></tr>	
 
-		<!--  
-		<tr><th>Role</th><td>
-		<%--if(dto.getGrade().equals("admin")){%>	
-		<input type="radio" name="role" value="1" checked="checked">Member
-		<input type="radio" name="role" value="0">Admin
-		<%} %>
-		<%if(dto.getGrade().equals("일반")) {%>
-		<input type="radio" name="role" value="1">Member
-		<input type="radio" name="role" value="0" checked="checked">Admin
-		<%}--%>
-		</td></tr>
-		-->
 		<tr><td colspan="2"><input type="submit" value="Submit"></td></tr>
 	</table>
 </form>
+
+<button>
+	<a href="#" onclick="deleteConfirm();">회원탈퇴</a> |
+</button>
 </body>
 </html>

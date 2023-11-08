@@ -10,6 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <title>join.jsp</title>
+ <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
 </head>
 <body>
 <%@include file="submenu.jsp" %>
