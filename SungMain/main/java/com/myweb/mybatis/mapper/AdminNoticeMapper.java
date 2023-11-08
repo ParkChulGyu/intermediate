@@ -30,6 +30,7 @@ public interface AdminNoticeMapper {
 	
 	ArrayList<ReplyDTO> replyList(ReplyDTO dto);
 	
+	int pictureWriteReReply(ReplyDTO dto) throws Exception;
 
 	
 	

@@ -15,7 +15,7 @@ public int totalCount(String search) ;
 	
 	public List<MemberDTO> getMemberPaging(Map<String, Object> pstr) ;
 	
-	public MemberDTO getMembermapper(MemberDTO dto); 
+	public MemberDTO getMembermapper(MemberDTO dto) throws Exception; 
 
 	public List<MemberDTO> getMemberList();	
 	
@@ -35,6 +35,10 @@ public int totalCount(String search) ;
 
 	public int checkId(String user_id) throws Exception;
 	
+	
+	public MemberDTO readMember(String user_id) throws Exception;
+	
+	public int updatePw(MemberDTO dto) throws Exception;
 	
 	
 	

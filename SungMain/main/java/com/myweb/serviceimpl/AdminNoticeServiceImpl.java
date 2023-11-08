@@ -64,6 +64,12 @@ public class AdminNoticeServiceImpl implements AdminNoticeService{
 	 ArrayList<ReplyDTO> replyList(ReplyDTO dto) {
 		return admin.replyList(dto);
 	} 
+	@Override
+	
+	public int pictureWriteReReply(ReplyDTO dto) throws Exception{
+ 
+		return admin.pictureWriteReReply(dto);
+	} 
 	
 	
 	

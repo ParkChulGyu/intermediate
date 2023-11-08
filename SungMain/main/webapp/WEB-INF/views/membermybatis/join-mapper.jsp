@@ -19,6 +19,7 @@
 
 
 		
+		
 	
 		 <body> 
   <h2>회원가입</h2>
@@ -61,7 +62,7 @@
                   <i id = "telEmo" class="fa-solid fa-phone"></i>
                </div>
                <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="mEmail"   placeholder="이메일" name = "mEmail">
+                  <input type="text" class="form-control" id="mEmail" oninput="checkEmail(),activateSignupbtn()"  placeholder="이메일" name = "mEmail">
                   <label for="floatingInput">이메일</label>
                   <i id = "tel4Emo" class="fa-solid fa-phone"></i>
                </div>
@@ -98,7 +99,7 @@
                
                
                <div style="display: grid; padding-top: 5%;">
-               <button type="submit" class="btn btn-secondary" style="padding: 2% 0 2%;" id="signupbtn" >회원가입</button>
+               <button type="submit" class="btn btn-secondary" style="padding: 2% 0 2%;" id="signupbtn" disabled>회원가입</button>
                </div>
             </div>
          </form>
@@ -133,6 +134,14 @@ function regMemberNickName(mNickName) { //이름
 
 
 
+function regEmail(emailinputed) { // 이메일
+	console.log("이거 되야 하는데 안되넹.....");
+	console.log("체크다잉 : " + emailinputed);
+	var regExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	return regExp.test(emailinputed);
+}
+
+
 
 var idCheck = 0;
 var pwdCheck = 0;
@@ -140,6 +149,7 @@ var phoneCheck = 0;
 var nameCheck = 0;
 var nicknameCheck = 0;
 var pwCheck = 0;
+var emailCheck = 0;
 
 function checkName() {
    var inputed = $('#mName').val(); //이름에 입력한 값
@@ -208,13 +218,55 @@ function checkNickName() {
             nicknameCheck = 0; // 회원 가입 전 값들 체크하기 위해 (0은 불가, 1은 가능)
          } else if(regMemberNickName(inputed) == true) { //정규표현식에 해당할 때
         	 console.log("이거 왜 안됌?");
-            $("#mNickName").css("background-color", "#aaaaaa"); // input 배경 초록색으로 바꾸기
+            $("#mNickName").css("background-color", "#B0F6AC"); // input 배경 초록색으로 바꾸기
             $("#nEmo2").css("color", "#1853ff"); // 이모티콘 파란색으로 바꾸기
             nicknameCheck = 1;
          }
       }
    })
 }
+
+
+
+
+function checkEmail() {
+	   var emailinputed = $('#mEmail').val(); //이름에 입력한 값
+	   $.ajax({
+	      success: function() {
+	    	  console.log("mEmail 체크 : " + emailinputed);
+	    	  console.log("mEmail 체크 : " + regEmail(emailinputed));
+	         if(regEmail(emailinputed) == false) { //입력한 값이 정규표현식에 해당되지 않을 때와 18자 이상이 넘을 때 
+	            $("#signupbtn").prop("disabled", true); //회원가입 버튼 누르지 못하게 하기
+	            $("#signupbtn").css("background-color", "#signupbtn"); //버튼 회색으로 바꾸기 
+	            $("#mEmail").css("background-color", "#FFCECE");  // input 배경 붉은색으로 바꾸기
+	            $("#nEmo").css("color", "#ff2020"); //이모티콘 빨간색으로 바꾸기
+	            emailCheck = 0; // 회원 가입 전 값들 체크하기 위해 (0은 불가, 1은 가능)
+	         } else if(regEmail(emailinputed) == true) { //정규표현식에 해당할 때
+	            $("#mEmail").css("background-color", "#B0F6AC"); // input 배경 초록색으로 바꾸기
+	            $("#nEmo").css("color", "#1853ff"); // 이모티콘 파란색으로 바꾸기
+	            emailCheck = 1;
+		    	  console.log("mEmail 체크 : " + emailCheck);
+
+	         }
+	      }
+	   })
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function checkPwd() {
 	   var inputed = $('#mPwd').val();
 	   
@@ -298,8 +350,9 @@ function activateSignupbtn() {
 	console.log("pw pwCheck :" + pwCheck );
 	console.log("pw pwdCheck :" + pwdCheck );
 	console.log("pw phoneCheck :" + phoneCheck );
+	console.log("pw emailCheck :" + phoneCheck );
 	
-	   if( idCheck == 1 && pwdCheck == 1  && nameCheck == 1 && nicknameCheck == 1 && pwCheck == 1  ) {
+	   if( idCheck == 1 && pwdCheck == 1  && nameCheck == 1 && nicknameCheck == 1 && pwCheck == 1  && emailCheck == 1 ) {
 	   console.log("이거 안되야 혀");
 	      $("#signupbtn").prop("disabled", false);   
 	      $("#signupbtn").css("background-color", "#B0F6AC");

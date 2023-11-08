@@ -112,9 +112,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
+
+	<select id="readMember" parameterType="String"
+		resultType="com.myweb.dto.MemberDTO">
+		select * from user where user_id=#{user_id}
+		
+	</select>
 	
 
 
+
+<!-- 비밀번호 변경 -->
+	<update id="updatePw" >
+	update user set pw = #{pw} where user_id = #{user_id}
+	</update>
 
 
 

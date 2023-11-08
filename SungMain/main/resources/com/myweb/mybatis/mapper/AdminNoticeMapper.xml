@@ -106,7 +106,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 ]]>
 	</select>
 
+<insert id="pictureWriteReReply"  parameterType="com.myweb.dto.ReplyDTO">
+			 <![CDATA[
+			 INSERT INTO p_reply (bidx, grp, grps, grpl, writer, content, regdate)
+				VALUES (#{bno}, #{grp}, 0, #{grpl}, #{writer}, #{content}, NOW());
+			  ]]>
 
+</insert>
 
   
 

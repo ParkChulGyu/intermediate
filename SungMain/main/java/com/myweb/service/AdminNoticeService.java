@@ -33,6 +33,9 @@ public interface AdminNoticeService {
 	
 	
 	public ArrayList<ReplyDTO> replyList(ReplyDTO dto) ;
+	
+	
+	public int pictureWriteReReply(ReplyDTO dto) throws Exception;
 
 
 	

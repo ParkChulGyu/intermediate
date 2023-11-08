@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -264,14 +265,17 @@ public class MemberMybatisMapperController{
 		return view;		
 	}
 	
+	@ResponseBody
 	@PostMapping(value = "loginP")
-	public String loginAction(MemberDTO dto, HttpSession session) {
+	public int loginAction(MemberDTO dto, HttpSession session) throws Exception{
 	
+		System.out.println("dto check : " + dto);
 		String user_id = dto.getUser_id();
 		String pw = dto.getPw();		
 		
-		
+		int result = 0;
 		dto = service.getMembermapper(dto);
+		System.out.println("dto check : " + dto);
 		
 		if (dto != null) {
 			if (dto.getPw().equals(pw)) {
@@ -279,12 +283,22 @@ public class MemberMybatisMapperController{
 				session.setAttribute("user_id", user_id);
 				session.setAttribute("nickname", dto.getNickname());
 				
-				view = "redirect:main-mapper";
+				result = 1;
+				
 			}
+		}else if (dto == null) {
+			
+			
+			result = 0;
 		}
+			
 		
-		return view;		
+		System.out.println("view check : " + result);
+		
+		return result;		
 	}
+			
+		
 	
 	@GetMapping("idfind")
 	public String idfind() {
@@ -294,12 +308,19 @@ public class MemberMybatisMapperController{
 		return view;	
 	}
 	@PostMapping("idfindP")
-	public String idfindP(String str_email01,String str_email02,Model model) throws Exception {
+	public String idfindP(String str_email01,String str_email02,@RequestParam Map<String,String> map, Model model) throws Exception {
 		
-		System.out.println(str_email01+"@"+str_email02);
+		System.out.println(map);
+		
+		
+		System.out.println(map.get("selectEmail"));
+		
+		if(str_email02 == null) {
+			str_email02 = map.get("selectEmail");
+		}
 		
 		String email = str_email01+"@"+str_email02;
-		
+			System.out.println(email);
 		
 		String user_id = service.idfind(email);
 		
@@ -310,7 +331,7 @@ public class MemberMybatisMapperController{
 		
 		
 		
-		model.addAttribute("msg", "당신의 아이디는 :" + user_id + " 입니다");
+		model.addAttribute("msg", "당신의 아이디는  " + user_id + " 입니다");
 		view = "membermybatis/idfind";		
 		}		
 		
@@ -318,7 +339,19 @@ public class MemberMybatisMapperController{
 		return view;	
 	}
 	
+	@GetMapping("pwfind")
+	public String pwfind() {
+		
+		view = "membermybatis/pwfind";		
+		
+		return view;	
+	}
 	
+	
+	@PostMapping("pwfindP")
+	public void pwfindP(@ModelAttribute MemberDTO member, HttpServletResponse response) throws Exception{
+		service.findPw(response, member);
+	}
 	
 	
 	
@@ -326,7 +359,7 @@ public class MemberMybatisMapperController{
 	
 	
 	@GetMapping("update-mapper")
-	public String update(Model model, HttpSession session) {
+	public String update(Model model, HttpSession session) throws Exception{
 		
 		String user_id = (String)session.getAttribute("user_id");
 
@@ -365,7 +398,7 @@ public class MemberMybatisMapperController{
 	}
 	
 	@PostMapping("deleteP")
-	public String deleteAction(MemberDTO dto, HttpSession session) {
+	public String deleteAction(MemberDTO dto, HttpSession session)  throws Exception{
 		System.out.println("delete - post");
 		
 		String user_id = (String)session.getAttribute("user_id");

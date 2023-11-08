@@ -2,6 +2,8 @@ package com.myweb.controller;
 
 
 
+
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -198,7 +200,29 @@ public class AdminNoticeController{
 		
 		return replyList;
 	}
+	@ResponseBody
+	@RequestMapping("picture_write_rereply")
+	public ReplyDTO write_rereply(@RequestParam String bidx,@RequestParam String content, HttpSession session) throws Exception{
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setBidx(bidx);
+		
+	//	dto.setGrp(Integer.parseInt(idx));
+		
+		dto.setGrpl(1);
+		
+		dto.setContent(content);  
+		
+		dto.setWriter((String) session.getAttribute("nickname"));
+		
+		service.pictureWriteReReply(dto);
+		
+		return dto;
+		
+	}
 
+	
 	
 
 	

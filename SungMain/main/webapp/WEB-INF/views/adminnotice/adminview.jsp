@@ -105,7 +105,7 @@ ${one.idx }
 	<section class="modal-section">
 	<div class="card card-body">
 	<!-- 댓글 목록 -->
-	<div class="reply-list reply-list${one.idx}">
+	<div class="reply-list${one.idx}">
 	<!-- 댓글이 들어가는 곳 -->
 	</div> 
 	<!-- 댓글 작성 => 로그인한 상태여야만 댓글 작성 칸이 나온다. -->
@@ -125,8 +125,8 @@ ${one.idx }
 		
 	</div>
 	<div class="col-3">
-	<button type="button" idx="${one.idx}"
-		class="btn btn-sucess mb-1 write_reply">댓글&nbsp;달기</button>
+	<button type="button" bidx="${one.idx}"
+		class="write_rereply">댓글&nbsp;달기</button>
 	</div>
 	</div>
 	
@@ -198,21 +198,21 @@ const ReplyList = function(idx) {
 	 				//댓글에 답글달기를 누르면 답글입력란이 나온다.
 	 				//------답글입력란
 	 				listHtml += " <div class='collapse row rereply_write' id='re_reply" + idx +"'>";
-	 				listHtml += "   <div class='col-1'>"
+	 				
 	 			
-	 				listHtml += " <div class='col-1>'";
- 					listHtml += " <a href='other_profile.do?other_nick=" +writer+"'>";
- 					listHtml += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chat-dots' viewBox='0 0 16 16'>";
- 					listHtml += " <path d='M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z'/>";
- 					listHtml +=	 "<path d='m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z'/>";
- 					listHtml +=	"</svg>";
+	 				listHtml += " <div class='col-1'>"; // div 열기
+	 				listHtml += " <a href='other_profile.do?other_nick=" + writer + "'>"; // 링크 열기
+	 				listHtml += "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chat-dots' viewBox='0 0 16 16'>"; // SVG 열기
+	 				listHtml += " <path d='M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z'/>"; // SVG path 열기
+	 				listHtml += "<path d='m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z'/>"; // 다른 SVG path 열기
+	 				listHtml += "</svg>"; // SVG 닫기
  					listHtml += " </a>";
  					listHtml += " </div>";
  					listHtml += " <div class='col-7'>"
  					listHtml +="   <input class='w-100 input_rereply_div form-control' id='input_rereply" + idx +"' type='text' placeholder='댓글입력...'>"
 	 				listHtml +="</div>"
 	 				listHtml +="  <div class='col-3'>"
-	 				listHtml +="<button type='button' class='btn btn-success mb-1 write_rereply' idx='" + idx + "' bidx='" + bidx + "'>답글&nbsp;달기</button>"
+	 				listHtml +="<button type='button' class='write_rereply' idx='" + idx + "' bidx='" + bidx + "'>답글&nbsp;달기</button>"
 	 				listHtml +="</div>";
 	 				listHtml +="</div>";
 	 				// 답글입력란 끝
@@ -224,9 +224,10 @@ const ReplyList = function(idx) {
 	 		//댓글 리스트 부분에 받아온 댓글 리스트를 넣기
 	 		$(".reply-list" + idx).html(listHtml);
 	 		//답글을 작성한 후 답글달기 버튼을 눌렀을 때 그 click evnet를 아래처럼 jquery로 처리한다.
-	 		$('button.btn.btn-succes.mb-1.write_rereply').on('click', function() {
-	 			consolg.log('idx', $(this).attr('idx') );
-	 			console.log( 'bidx', $(this).attr('bidx'));
+	 		$('.write_rereply').on('click', function() {
+	 			console.log("dfdfdfdf");
+	 			console.log('idx'+ $(this).attr('idx') );
+	 			console.log( 'bidx' +  $(this).attr('bidx'));
 	 		//답글을 DB에 저장하는 함수를 호출한다. bidx와 idx를 같이 넘겨준다.
 			 WriteReReply($(this).attr('bidx'), $(this).attr('idx'));
 	 			
@@ -252,16 +253,17 @@ const ReplyList = function(idx) {
 
 
 const WriteReReply = function(bidx,idx) {
+	
 	console.log("idx 체크 : "  + idx);
 	console.log("bidx 체크 : "  + bidx);
 	
-	console.log($("#input_rereply" + no).val());
+	console.log($("#input_rereply" + idx).val());
 	
 	// 댓글 입력란의 내용을 가져온다.
 	// "" 를 붙인 이유 => 앞뒤 공백을 제거한다.(띄어쓰기만 입력했을때 댓글작성안되게 처리하기 위함)
 	
 	let content = $("#input_rereply" + idx).val();
-	content = content.trim();
+//	content = content.trim();
 	
 	
 	if(content ==""){ // 입력된게 없을 때
@@ -271,11 +273,11 @@ const WriteReReply = function(bidx,idx) {
 		$("#input_rereply" + idx).val("");
 		
 		//reply+1 하고 그 값을 가져옴
-		$ajax({
+		$.ajax({
 			url : 'picture_write_rereply',
 			type : 'get',
 			data : {
-				idx : idx,
+				
 				bidx : bidx,
 				content : content
 			},
@@ -288,8 +290,9 @@ const WriteReReply = function(bidx,idx) {
 				console.log("답글 작성 성공");
 				//게시물 번호(bidx)에 해당하는 댓글리스트를 새로 받아오기
 				ReplyList(bidx);
-				
 
+				picture_reply_up;
+				
 			},
 			error : function() {
 				alert('서버 에러');
@@ -297,6 +300,14 @@ const WriteReReply = function(bidx,idx) {
 		});
 	};
 };
+
+
+
+
+
+
+
+
 
 //모댓글 삭제일때
 
