@@ -38,6 +38,7 @@ public class MemberMybatisMapperController{
 	
 
 	
+	
 	@RequestMapping("memberList-paging")
 	public String memberListpaging(Model model, 
 			@RequestParam Map<String, String> map){

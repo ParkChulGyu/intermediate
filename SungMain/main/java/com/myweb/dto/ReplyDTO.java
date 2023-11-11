@@ -16,6 +16,7 @@ public class ReplyDTO {
     private String content;
     private String regdate;
     private String wgap;
+    private int next_grps;
     
 	
 	

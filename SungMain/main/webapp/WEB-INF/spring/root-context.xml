@@ -28,5 +28,9 @@
 	</bean>
 	
 	<mybatis-spring:scan base-package="com.myweb.mybatis.mapper"/>
+	
+
+	
+	
 
 </beans>

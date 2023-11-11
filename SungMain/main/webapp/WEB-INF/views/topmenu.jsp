@@ -12,6 +12,7 @@ String contextPath = request.getContextPath();
 
 <a href="<%=contextPath %>/adminnotice/adminlist">admin list</a> |
 
+<a href="<%=contextPath %>/Qna/Qna">QnA Board</a> |
 
 
 </h2>

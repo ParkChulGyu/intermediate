@@ -65,12 +65,70 @@ public class AdminNoticeServiceImpl implements AdminNoticeService{
 		return admin.replyList(dto);
 	} 
 	@Override
+	public
+	ArrayList<ReplyDTO> showrereply(ReplyDTO dto) {
+		return admin.showrereply(dto);
+	} 
+	@Override
 	
 	public int pictureWriteReReply(ReplyDTO dto) throws Exception{
  
 		return admin.pictureWriteReReply(dto);
+		
+		
 	} 
+	@Override
+	
+	public int DeleteReply(ReplyDTO dto) throws Exception{
+		
+		return admin.DeleteReply(dto);
+		
+		
+	} 
+	@Override
+	
+	public int DeleteReReply(ReplyDTO dto) throws Exception{
+		
+		return admin.DeleteReReply(dto);
+		
+		
+	} 
+	@Override
+	
+	public int pictureWriteReply(ReplyDTO dto) throws Exception{
+		System.out.println("dto.getIdx() 체크 : " + dto.getIdx());
+		return admin.pictureWriteReply(dto) ;
+	} 
+	@Override
+	
+	public int p_reply_max_no() throws Exception{ 
+		
+		return admin.p_reply_max_no();
+	} 
+	@Override
+	
+	public int pictureWriteReplyupdate(ReplyDTO dto) throws Exception {
+		return admin.pictureWriteReplyupdate(dto);
+	}
+	@Override
+	
+	public int p_reply_max_Grps(ReplyDTO dto) throws Exception {
+		return admin.p_reply_max_Grps(dto);
+	}
+		
+	@Override
+	
+	public int pictureWriteReplyupdateGrpas(ReplyDTO dto) throws Exception {
+	
+		return admin.pictureWriteReplyupdateGrpas(dto);
+	}
+	 
 	
 	
+	@Override
+	public
+	ArrayList<ReplyDTO> replyanswerList(ReplyDTO dto) {
+		return admin.replyanswerList(dto);
+	} 
 	
 }

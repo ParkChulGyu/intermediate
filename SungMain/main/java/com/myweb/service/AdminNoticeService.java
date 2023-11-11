@@ -34,13 +34,24 @@ public interface AdminNoticeService {
 	
 	public ArrayList<ReplyDTO> replyList(ReplyDTO dto) ;
 	
+	public ArrayList<ReplyDTO> showrereply(ReplyDTO dto) ;
 	
 	public int pictureWriteReReply(ReplyDTO dto) throws Exception;
 
+	public int pictureWriteReply(ReplyDTO dto) throws Exception;
 
+	public int p_reply_max_no() throws Exception;
 	
-
-
+	public int pictureWriteReplyupdate(ReplyDTO dto) throws Exception;
 	
+	public int p_reply_max_Grps(ReplyDTO dto) throws Exception;
+
+	public int pictureWriteReplyupdateGrpas(ReplyDTO dto) throws Exception;
+
+	public int DeleteReply(ReplyDTO dto) throws Exception;
+	
+	public int DeleteReReply(ReplyDTO dto) throws Exception;
+	
+	public ArrayList<ReplyDTO> replyanswerList(ReplyDTO dto) ;
 	
 }

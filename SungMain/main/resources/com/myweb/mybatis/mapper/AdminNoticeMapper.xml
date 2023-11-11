@@ -100,22 +100,111 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="replyList" parameterType="com.myweb.dto.ReplyDTO"
 		resultType="com.myweb.dto.ReplyDTO">
 		 <![CDATA[
-		select r.idx, r.bidx, r.grp, r.grpl, r.writer, r.content, date_format(regdate,'%Y-%m-%d') regdate, datediff(now(), regdate) wgap
-		from p_reply r where r.bidx = #{bidx}
-		order by grp asc, grps desc
+		SELECT
+    r.idx,
+    r.bidx,
+    r.grp,
+    r.grps,
+    r.grpl,
+    r.writer,
+    r.content,
+    date_format(regdate,'%Y-%m-%d') regdate,
+    datediff(now(), regdate) wgap,
+    CASE WHEN r.grpl = 0 THEN LEAD(r.grps) OVER (PARTITION BY r.bidx ORDER BY r.grp, r.grps) END AS next_grps
+FROM p_reply r
+WHERE r.bidx = #{bidx}
+ORDER BY r.grp, r.grps;		
+ ]]>
+	</select>
+
+<select id="showrereply" parameterType="com.myweb.dto.ReplyDTO"
+		resultType="com.myweb.dto.ReplyDTO">
+		 <![CDATA[
+		select r.idx, r.bidx, r.grp,r.grps, r.grpl, r.writer, r.content, date_format(regdate,'%Y-%m-%d') regdate, datediff(now(), regdate) wgap
+		from p_reply r 
+		where r.grp = #{grp}  And  r.grpl = #{grpl}
+		order by grp asc, grps asc
 		 ]]>
 	</select>
 
+<select id="replyanswerList" parameterType="com.myweb.dto.ReplyDTO"
+		resultType="com.myweb.dto.ReplyDTO">
+		 <![CDATA[
+		select r.idx, r.bidx, r.grp,r.grps, r.grpl, r.writer, r.content, date_format(regdate,'%Y-%m-%d') regdate, datediff(now(), regdate) wgap
+		from p_reply r 
+		where r.grps = #{grps}  And r.grpl = #{grpl}
+		order by grp asc, grps asc
+		 ]]>
+	</select>
+<!--  답글 쓰기 -->
 <insert id="pictureWriteReReply"  parameterType="com.myweb.dto.ReplyDTO">
 			 <![CDATA[
-			 INSERT INTO p_reply (bidx, grp, grps, grpl, writer, content, regdate)
-				VALUES (#{bno}, #{grp}, 0, #{grpl}, #{writer}, #{content}, NOW());
+			 INSERT INTO p_reply (idx, bidx, grp, grps, grpl, writer, content, regdate)
+				VALUES (0 , #{bidx}, #{grp},#{grps} , #{grpl}, #{writer}, #{content}, NOW());
+			  ]]>
+
+
+</insert>
+
+<!--  댓글 쓰기 -->
+<insert id="pictureWriteReply"  parameterType="com.myweb.dto.ReplyDTO">
+			 <![CDATA[
+			 INSERT INTO p_reply (idx, bidx, grp, grps, grpl, writer, content, regdate)
+				VALUES (0, #{bidx}, #{grp}, 0, 0, #{writer}, #{content}, NOW());
 			  ]]>
 
 </insert>
 
-  
 
+<!-- 댓글 삭제 -->
+<delete id="DeleteReply" parameterType="com.myweb.dto.ReplyDTO">
+    <![CDATA[
+        delete from p_reply
+        where grp = #{grp}
+    ]]>
+</delete>
+<!-- 대댓글 삭제 -->
+<delete id="DeleteReReply" parameterType="com.myweb.dto.ReplyDTO">
+    <![CDATA[
+        delete from p_reply
+        where idx = #{idx}
+    ]]>
+</delete>
+
+
+  
+<select id="p_reply_max_no" 
+		resultType="int">
+		 <![CDATA[
+		SELECT MAX(idx)  as idx FROM p_reply;
+		 ]]>
+	</select>
 	
+	<update id="pictureWriteReplyupdate" parameterType="com.myweb.dto.ReplyDTO">
+    <![CDATA[
+    UPDATE p_reply
+    SET grp = #{grp}
+    WHERE grps = 0
+    ]]>
+</update>
+
+
+<select id="p_reply_max_Grps" 
+		resultType="int">
+		 <![CDATA[
+		SELECT MAX(grps)  as grps FROM p_reply  where grp = #{grp};
+		 ]]>
+	</select>
+
+	<update id="pictureWriteReplyupdateGrpas" parameterType="com.myweb.dto.ReplyDTO">
+    <![CDATA[
+    UPDATE p_reply
+    SET grps = #{grps}
+    WHERE grp = #{grp} AND grps = #{grps } -1  And grpl = 1
+    ]]>
+</update>
+
+
+
 
 </mapper>

@@ -62,9 +62,6 @@ public class AdminNoticeController{
 	public String adminlist(Model model, 
 			@RequestParam Map<String, String> map) throws Exception {
 		
-		System.out.println("memberList-paging 최초 페이징이 불러짐");
-		System.out.println(map); // 현재 맵에 들어있는값 모두
-		System.out.println(map.get("pageNum"));
 
 		AdminNoticeDTO mdto = null;
 		// 검색값 있는지 확인
@@ -76,7 +73,6 @@ public class AdminNoticeController{
 		
 		// 페이지값 확인
 		int pageNum = 1;
-		System.out.println("체크하자 체크1212" +map.get("pageNum"));
 		if(map.get("pageNum") != null ) {
 			pageNum = Integer.parseInt(map.get("pageNum"));
 		}
@@ -115,7 +111,6 @@ public class AdminNoticeController{
 		
 		List<AdminNoticeDTO> list = service.getMemberPaging(pstr);
 		
-//		System.out.println("test"+ list);
 		
 		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
 		
@@ -200,28 +195,189 @@ public class AdminNoticeController{
 		
 		return replyList;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@ResponseBody
-	@RequestMapping("picture_write_rereply")
-	public ReplyDTO write_rereply(@RequestParam String bidx,@RequestParam String content, HttpSession session) throws Exception{
+	@RequestMapping("writeReply")
+	public ArrayList<ReplyDTO> writeReply(@RequestParam String idx,@RequestParam int grp, @RequestParam int grpl, HttpSession session){
 		
 		ReplyDTO dto = new ReplyDTO();
 		
-		dto.setBidx(bidx);
+		dto.setGrp(grp);
 		
-	//	dto.setGrp(Integer.parseInt(idx));
+		dto.setGrpl(grpl);
+		ArrayList<ReplyDTO> replyList = new ArrayList();
+		
+		replyList = service.replyanswerList(dto);
+		
+		
+		System.out.println("replyLIst countcheck " + replyList.size() );
+		
+		
+		
+		return replyList;
+	}
+	
+	@ResponseBody
+	@RequestMapping("showrereply")
+	public ArrayList<ReplyDTO> showrereply(@RequestParam String idx,@RequestParam int grp, @RequestParam int grpl, HttpSession session){
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setBidx(idx);
+		
+		dto.setGrp(grp);
 		
 		dto.setGrpl(1);
 		
+		ArrayList<ReplyDTO> replyList = new ArrayList();
+		
+		replyList = service.showrereply(dto);
+	
+		
+		
+		return replyList;
+	}
+	
+	@ResponseBody
+	@RequestMapping("rerewritebutton")
+	public ReplyDTO rerewritebutton(@RequestParam String idx,@RequestParam String bidx,@RequestParam int grp, @RequestParam int grpl, HttpSession session){
+		
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setIdx(idx);
+		dto.setBidx(bidx);
+		dto.setGrp(grp);
+		dto.setGrpl(grpl);
+		
+		
+		return dto;
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping("picture_write_rereply")
+	public ReplyDTO write_rereply(@RequestParam String idx,@RequestParam String bidx,@RequestParam String content, HttpSession session) throws Exception{
+		ReplyDTO dto = new ReplyDTO();
+		dto.setBidx(bidx);
+		dto.setGrp(Integer.parseInt(idx));
+		dto.setGrpl(1);
 		dto.setContent(content);  
-		
 		dto.setWriter((String) session.getAttribute("nickname"));
-		
+		int check = service.p_reply_max_Grps(dto);
+		dto.setGrps(check);
+		dto.setIdx(idx);
 		service.pictureWriteReReply(dto);
+			
+		
+		
+		dto.setGrps(check+1);
+		
+		
+		service.pictureWriteReplyupdateGrpas(dto);
+		
+		
+		
+		
+		
 		
 		return dto;
 		
 	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping("picture_write_reply")
+	public ReplyDTO write_reply(@RequestParam String idx,@RequestParam String content, HttpSession session) throws Exception{
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setBidx(idx);
+		
+		
+		ArrayList<ReplyDTO> replyList = new ArrayList();
+		
+		replyList = service.replyList(dto);
+	
+		
+		
+		
+		dto.setContent(content);  
+		dto.setWriter((String) session.getAttribute("nickname"));
 
+		int check = 0;
+		if(replyList.size() != 0) {
+			
+			check = service.p_reply_max_no();
+			dto.setGrp(check+1);
+			service.pictureWriteReply(dto);
+		}else {
+			 dto.setGrp(check);
+			  service.pictureWriteReply(dto);
+			  check = service.p_reply_max_no();
+			  dto.setGrp(check);
+			 service.pictureWriteReplyupdate(dto);
+		}
+		
+		
+		
+		return dto;
+		
+	}
+	@ResponseBody
+	@RequestMapping("picture_delete_reply")
+	public int picture_delete_reply(@RequestParam String idx,@RequestParam String bidx, HttpSession session) throws Exception{
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setIdx(idx);
+		
+		dto.setBidx(bidx);
+		
+		dto.setGrp(Integer.parseInt(bidx));
+		
+		
+		int result = service.DeleteReply(dto);
+		
+		
+		return  result;
+		
+	}
+	@ResponseBody
+	@RequestMapping("rereply_delete")
+	public int rereply_delete(@RequestParam String idx,@RequestParam String bidx, HttpSession session) throws Exception{
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setIdx(idx);
+		
+		
+		
+		
+		int result = service.DeleteReReply(dto);
+		
+		
+		return  result;
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 
@@ -251,7 +407,7 @@ public class AdminNoticeController{
 		    String ext = fileName.substring(fileName.lastIndexOf("."));  // 파일 확장자
 		    String now = new SimpleDateFormat("yyyyMMdd_HmsS").format(new Date());
 		    String newFileName = now + ext;  // 새로운 파일 이름("업로드일시.확장자")
-
+		    
 		    // 3. 파일명 변경
 		    File oldFile = new File(saveDirectory + File.separator + fileName);
 		    File newFile = new File(saveDirectory + File.separator + newFileName);
@@ -259,11 +415,8 @@ public class AdminNoticeController{
 
 		    // 4. 다른 폼값 받기
 		    String nickname = mrequest.getParameter("nickname");
-		    System.out.println("nickname 확인 " + nickname);
 		    String content = mrequest.getParameter("content");
-		    System.out.println("content 확인 " + content);
 		    String title = mrequest.getParameter("title");
-		    System.out.println("title 확인 " + title);
 		    String[] category = mrequest.getParameterValues("cate");
 		    StringBuffer cateBuf = new StringBuffer();
 		    if (category == null) {
@@ -275,19 +428,19 @@ public class AdminNoticeController{
 		        }
 		    }
 
-		    	System.out.println("category 확인 :" + category.toString());
+System.out.println("category.toString() check : " + category.toString());
+		    
 		    // 5. DTO 생성
 		    AdminNoticeDTO dto = new AdminNoticeDTO();
 		    dto.setNickname(nickname);
 		    dto.setTitle(title);
-		    dto.setContent(category.toString());
+		    dto.setCategory(category.toString());
 		    dto.setOfile(fileName);
 		    dto.setSfile(newFileName);
 		    dto.setContent(content);
 
 		    // 6. DAO를 통해 데이터베이스에 반영
 		    int rs = service.insertFile(dto);
-		    System.out.println("rs 체크" + rs);
 		    request.setAttribute("success", "파일 업로드 성공");
 
 		    // 7. 파일 목록 JSP로 리디렉션

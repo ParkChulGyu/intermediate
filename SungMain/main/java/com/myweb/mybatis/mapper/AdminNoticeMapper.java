@@ -30,9 +30,28 @@ public interface AdminNoticeMapper {
 	
 	ArrayList<ReplyDTO> replyList(ReplyDTO dto);
 	
-	int pictureWriteReReply(ReplyDTO dto) throws Exception;
+	ArrayList<ReplyDTO> showrereply(ReplyDTO dto);
 
 	
+	int pictureWriteReReply(ReplyDTO dto) throws Exception;
+
+	int pictureWriteReply(ReplyDTO dto) throws Exception;
 	
+	int DeleteReply(ReplyDTO dto) throws Exception;
 	
+	int DeleteReReply(ReplyDTO dto) throws Exception;
+	
+	int p_reply_max_no() throws Exception;
+ 	
+	int picture_reply_check(ReplyDTO dto) throws Exception;
+	
+	int pictureWriteReplyupdate(ReplyDTO dto) throws Exception;
+	
+	int p_reply_max_Grps(ReplyDTO dto) throws Exception;
+	
+	int pictureWriteReplyupdateGrpas(ReplyDTO dto) throws Exception;
+
+
+	ArrayList<ReplyDTO> replyanswerList(ReplyDTO dto);
+
 }
