@@ -4,7 +4,7 @@
         <div class="logo">
             <a href="#">
             
-                <img src="${pageContext.request.contextPath}/resources/img/main-logo4.jpg" alt="logo">
+                <img class="logoimg" src="${pageContext.request.contextPath}/resources/img/main-logo4.jpg" alt="logo">
             </a>
         </div> <!--로고 영역-->
         <nav>

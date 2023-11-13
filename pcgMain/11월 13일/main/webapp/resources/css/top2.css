@@ -5,7 +5,7 @@ li { list-style:none; }
 a { text-decoration: none; color:#333; display: block;}
 /* a태그에 마우스 오버하면 글자색 회색으로 변경 */
 a:hover {color:#ccc;}
-img { width:80%; }
+.logoimg { width:80%; }
 
 
 /* 헤더 */
