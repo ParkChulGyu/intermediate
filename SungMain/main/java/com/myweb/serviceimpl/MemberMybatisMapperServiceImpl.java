@@ -83,6 +83,23 @@ public class MemberMybatisMapperServiceImpl implements IMemberService{
 		
 		return dao.checkId(user_id);
 	}
+	
+	@Override
+	public int removeqnaone(int idx) throws Exception {
+		
+		return dao.removeqnaone(idx);
+	}
+	
+	@Override
+	public int removeadminone(int idx) throws Exception {
+		
+		return dao.removeadminone(idx);
+	}
+	
+	
+	
+	
+	
 //비밀번호 찾기 이메일발송
 	@Override
 	public void sendEmail(MemberDTO dto, String div) throws Exception {

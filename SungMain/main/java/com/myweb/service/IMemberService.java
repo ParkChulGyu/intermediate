@@ -28,6 +28,12 @@ public interface IMemberService {
 	int nameCheck(String name) throws Exception;
 	int checkId(String user_id) throws Exception;
 
+	int removeqnaone(int idx) throws Exception;
+	
+	public int removeadminone(int idx) throws Exception;
+	
+	
+	
 
 //이메일발송
 public void sendEmail(MemberDTO dto, String div) throws Exception;

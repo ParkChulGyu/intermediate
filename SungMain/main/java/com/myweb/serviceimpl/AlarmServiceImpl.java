@@ -63,4 +63,40 @@ public class AlarmServiceImpl implements AlarmService{
 	
 	}
 	
+	@Override
+	
+	public ReplyDTO getadminrereinfo(int bidx) throws Exception {
+		return dao.getadminrereinfo(bidx);
+	}
+	@Override
+	
+	public ReplyDTO getwriteradmininfo(int idx) throws Exception {
+		return dao.getwriteradmininfo(idx);
+	}
+
+	public  int getadminidx() throws Exception {
+		return dao.getadminidx();
+	}
+
+
+
+	@Override
+	public void alarmRead(int idx) {
+		dao.alarmRead(idx);
+	}
+
+
+	@Override
+	public List<AlarmDTO> getmembers(String toid) {
+		return dao.getmembers(toid);
+	}
+	
+
+
+
+
+
+
+
+
 }

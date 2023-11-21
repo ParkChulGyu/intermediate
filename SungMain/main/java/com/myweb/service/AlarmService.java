@@ -34,5 +34,19 @@ public interface AlarmService {
 
 	public QnaDTO alarmClick(QnaDTO Qna) throws Exception;
 	
+	public ReplyDTO getadminrereinfo(int bidx) throws Exception;
+	
+	public ReplyDTO getwriteradmininfo(int idx) throws Exception;
+	
+	public int getadminidx() throws Exception;
+	
+	public void alarmRead(int idx);
+	
+	public List<AlarmDTO> getmembers(String toid);
+	
+	
+	
+	
+	
 	
 }

@@ -21,9 +21,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.myweb.dto.AdminNoticeDTO;
 import com.myweb.dto.MemberDTO;
+import com.myweb.dto.MywritelistDTO;
 import com.myweb.dto.PagingDTO;
+import com.myweb.dto.QnaDTO;
+import com.myweb.dto.ReplyDTO;
+import com.myweb.service.AdminNoticeService;
 import com.myweb.service.IMemberService;
+import com.myweb.service.QnaService;
 
 
 @Controller
@@ -35,6 +41,14 @@ public class MemberMybatisMapperController{
 	@Autowired
 	@Qualifier("memberMybatisMapperServiceImpl")
 	IMemberService service;
+	
+	@Autowired
+	@Qualifier("QnaServiceImpl")
+	QnaService Qnaservice;
+	
+	@Autowired
+	@Qualifier("AdminNoticeServiceImpl")
+	AdminNoticeService Adminservice;
 	
 
 	
@@ -104,8 +118,14 @@ public class MemberMybatisMapperController{
 	
 			
 	@GetMapping("main-mapper")
-	public String mainInteface() {
+	public String mainInteface(Model model,HttpSession session) throws Exception {
 		System.out.println("main-mapper");		
+		
+		MemberDTO dto = new MemberDTO();
+		dto.setUser_id((String)session.getAttribute("user_id"));
+		
+	model.addAttribute(	"dto",service.getMembermapper(dto));
+
 		
 		view = "membermybatis/main-mapper";
 		
@@ -150,6 +170,42 @@ public class MemberMybatisMapperController{
 		
 	}
 	
+	@ResponseBody
+	@PostMapping(value = "mywritelistD")
+	public int mywritelistD(String[] qna , String[] admin)  throws Exception {
+		
+		
+	System.out.println("dfdfd" + qna[0]);
+	System.out.println("dfdfddfdfddfdfd" + admin[0]);
+	
+	int result = 0;
+	if (!"nop".equals(qna[0])) {
+		
+	    for (int i = 0; i < qna.length; i++) {
+	    	int idx = Integer.parseInt(qna[i]);
+	    	result = service.removeqnaone(idx);
+	    
+	    }
+	}
+	
+if (!"nop".equals(admin[0])) {
+		
+	    for (int i = 0; i < admin.length; i++) {
+	    	int idx = Integer.parseInt(admin[i]);
+	    	result = service.removeadminone(idx);
+	    
+	    }
+	}
+	
+	
+	
+	
+	
+	
+		return result;	
+		
+	}
+	
 	
 	//회원가입
 	@GetMapping("join-mapper")
@@ -172,33 +228,34 @@ public class MemberMybatisMapperController{
 	}
 	
 	
-	
+	@ResponseBody
 	@PostMapping("signup")
-	public void insertMember(HttpServletRequest request, HttpServletResponse response, MemberDTO dto) throws Exception {
+	public int insertMember(HttpServletRequest request, HttpServletResponse response, MemberDTO dto) throws Exception {
 
 		
-		
+			dto.setBirth("2003/4/9");
+			System.out.println("dtk check : " + dto);
 		//생년월일 구하기 ( 10보다 작으면 앞에 0 붙이기)
-		String years = request.getParameter("years"); //년도
-		String month =request.getParameter("month"); //월
-		String	day = request.getParameter("day");  //일
+//		String years = request.getParameter("years"); //년도
+//		String month =request.getParameter("month"); //월
+//		String	day = request.getParameter("day");  //일
 		
-		String user_id = request.getParameter("mId"); //아이디
-		System.out.println("mid 체크 : " + user_id );
-		String pw = request.getParameter("mPwd"); //비밀번호
-		String name = request.getParameter("mName"); //이름
-		String nickname = request.getParameter("mNickName"); //닉네임
-		String email = request.getParameter("mEmail"); //닉네임
-		String birth = years +"년" + month +"월" + day+"일"; // 년 월 일 합친 생년월일.
-		String PhoneNumber = request.getParameter("mTel"); // 전화번호
+		//String user_id = request.getParameter("mId"); //아이디
+		//System.out.println("mid 체크 : " + user_id );
+		//String pw = request.getParameter("mPwd"); //비밀번호
+		//String name = request.getParameter("mName"); //이름
+		//String nickname = request.getParameter("mNickName"); //닉네임
+		//String email = request.getParameter("mEmail"); //닉네임
+	//	String birth = years +"년" + month +"월" + day+"일"; // 년 월 일 합친 생년월일.
+		//String PhoneNumber = request.getParameter("mTel"); // 전화번호
 		
-		dto.setUser_id(user_id);
-		dto.setPw(pw);
-		dto.setName(name);
-		dto.setNickname(nickname);
-		dto.setEmail(email);
-		dto.setPhoneNumber(PhoneNumber);
-		dto.setBirth(birth);
+	//	dto.setUser_id(user_id);
+	//	dto.setPw(pw);
+	//	dto.setName(name);
+	//	dto.setNickname(nickname);
+	//	dto.setEmail(email);
+	//	dto.setPhoneNumber(PhoneNumber);
+	//	dto.setBirth(birth);
 		// 회원 정보들 세팅
 		//this.mNum = mNum; this.mPwd = mPwd; ... mRole=mRole; 
 		int rowcount = service.insertmember(dto); // 세팅해둔 dto객체를 넣었다.
@@ -206,21 +263,22 @@ public class MemberMybatisMapperController{
 		
 		
 		
-		PrintWriter out = response.getWriter();
-		response.setContentType("text/html; charset=UTF-8");
-
-		if(rowcount > 0) { //값이 데이터베이스에 저장이 되었을 때
-			
-			
-			out.println("<script>alert('계정이 등록 되었습니다'); location.href='/web/membermybatis/main-mapper';</script>");
-			
-			out.flush();
-		}else if(rowcount == 0) {
-			
-			out.println("<script>alert('회원가입에 실패하셨습니다'); location.href='/web/membermybatis/join-mapper';</script>");
-			out.flush();
-		}
-		
+//		PrintWriter out = response.getWriter();
+//		response.setContentType("text/html; charset=UTF-8");
+//
+//		if(rowcount > 0) { //값이 데이터베이스에 저장이 되었을 때
+//			
+//			
+//			out.println("<script>alert('계정이 등록 되었습니다'); location.href='/web/membermybatis/main-mapper';</script>");
+//			
+//			out.flush();
+//		}else if(rowcount == 0) {
+//			
+//			out.println("<script>alert('회원가입에 실패하셨습니다'); location.href='/web/membermybatis/join-mapper';</script>");
+//			out.flush();
+//		}
+		System.out.println("rowcount check " + rowcount);
+		return rowcount;
 	}
 	
 	
@@ -431,6 +489,300 @@ public class MemberMybatisMapperController{
 		return view;		
 		
 	}	
+	
+	@GetMapping("myqnalist")	
+	public String myqnalist(Model model,HttpSession session, 
+			@RequestParam Map<String, String> map) throws Exception {	
+		
+		System.out.println("memberList-paging 최초 페이징이 불러짐");
+		System.out.println(map); // 현재 맵에 들어있는값 모두
+		System.out.println(map.get("pageNum"));
+		
+		QnaDTO dto = new QnaDTO();
+		
+		
+		String nickname=(String)session.getAttribute("nickname");
+		
+		// 페이지값 확인
+				int pageNum = 1;
+				System.out.println("체크하자 체크1212" +map.get("pageNum"));
+				if(map.get("pageNum") != null ) {
+					pageNum = Integer.parseInt(map.get("pageNum"));
+				}
+				
+				
+		//검색값에 페이지값 세팅
+				
+			int totalCount = Qnaservice.getinfoQnacount(nickname); // 멤버 총인원
+			int listNum = 10;
+			
+			if(map.get("listNum")!=null) {
+				listNum = Integer.parseInt(map.get("listNum")); 
+			}
+			
+			int blockNum = 10;
+			PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+			//페이징값 세팅
+			pdto.setPaging();
+			
+			model.addAttribute("pdto",pdto);
+			
+			Map<String, Object> pstr= new HashMap<String, Object>();
+			
+				pstr.put("nickname", nickname);
+				pstr.put("listNum", pdto.getListNum());
+				pstr.put("start_rownum", pdto.getStart_rownum()-1);
+				
+				List<QnaDTO> list = Qnaservice.getinformationqnalist(pstr);
+			
+				model.addAttribute("list",list);
+		
+		
+		
+		System.out.println(list); 
+
+		
+		view = "membermybatis/myqnalist";
+		
+		return view;		
+		
+	}	
+	@GetMapping("myadminlist")	
+	public String myadminlist(Model model,HttpSession session, 
+			@RequestParam Map<String, String> map) throws Exception {	
+	
+		
+		AdminNoticeDTO mdto = null;
+		// 검색값 있는지 확인
+	
+		
+		// 페이지값 확인
+		int pageNum = 1;
+		if(map.get("pageNum") != null ) {
+			pageNum = Integer.parseInt(map.get("pageNum"));
+		}
+		
+		String nickname=(String)session.getAttribute("nickname");
+		
+		
+		// 페이지값 초기화 |pageNum을 제외한
+		int totalCount = Adminservice.getinfoadmincount(nickname); // 멤버 총인원
+		int listNum = 10;
+		if(map.get("listNum")!=null) {
+			listNum = Integer.parseInt(map.get("listNum")); 
+		}
+		int blockNum = 10;
+		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+		//페이징값 세팅
+		pdto.setPaging();
+
+		
+		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		// 있는 페이지 값으로 DB에서 원하는 List값 가져오기
+		Map<String, Object> pstr= new HashMap<String, Object>();
+		
+		
+			pstr.put("nickname", nickname);
+			pstr.put("listNum", pdto.getListNum());
+			pstr.put("start_rownum", pdto.getStart_rownum()-1);
+		
+		
+		List<AdminNoticeDTO> list = Adminservice.getinformationadminPaging(pstr);
+		
+		
+		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		
+		
+		
+		view = "membermybatis/myadminlist";
+		
+		return view;		
+		
+	}	
+	@GetMapping("myreplylist")	
+	public String myreplylist(Model model,HttpSession session, 
+			@RequestParam Map<String, String> map) throws Exception {	
+		
+		AdminNoticeDTO mdto = null;
+		// 검색값 있는지 확인
+	
+		
+		// 페이지값 확인
+		int pageNum = 1;
+		if(map.get("pageNum") != null ) {
+			pageNum = Integer.parseInt(map.get("pageNum"));
+		}
+		
+		String nickname=(String)session.getAttribute("nickname");
+		
+		
+		// 페이지값 초기화 |pageNum을 제외한
+		int totalCount = Adminservice.getinforeplycount(nickname); // 멤버 총인원
+		int listNum = 10;
+		if(map.get("listNum")!=null) {
+			listNum = Integer.parseInt(map.get("listNum")); 
+		}
+		int blockNum = 10;
+		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+		//페이징값 세팅
+		pdto.setPaging();
+
+		
+		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		// 있는 페이지 값으로 DB에서 원하는 List값 가져오기
+		Map<String, Object> pstr= new HashMap<String, Object>();
+		
+		
+		
+		
+			pstr.put("nickname", nickname);
+			pstr.put("listNum", pdto.getListNum());
+			pstr.put("start_rownum", pdto.getStart_rownum()-1);
+		
+		
+		List<ReplyDTO> list = Adminservice.getinformationareplyPaging(pstr);
+		
+		String content = null;
+		
+		for (ReplyDTO replyDTO : list) {
+		
+			 content = replyDTO.getContent();
+			content = content.replaceAll("@\\S+", ""); // @ 다음에 오는 모든 비공백 문자를 제거
+			replyDTO.setContent(content);
+		   
+		}
+			
+		
+		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+	
+		System.out.println("dfdfd" + list);
+		
+		
+		
+		view = "membermybatis/myreplylist";
+		
+		return view;		
+		
+	}	
+
+	
+	
+	@GetMapping("mywritelist")	
+	public String mywritelist(Model model,HttpSession session, 
+			@RequestParam Map<String, String> map) throws Exception {	
+		
+		AdminNoticeDTO mdto = null;
+		
+		
+		
+		
+		// 검색값 있는지 확인
+		String search = "";
+		if(map.get("slt") != null  ) {
+			search = map.get("slt"); // 검색 밸류
+		}
+		
+		
+		String selectdate="";
+		if(map.get("selectdate") != null) {
+			selectdate = map.get("selectdate");
+		}
+		
+		System.out.println(selectdate);
+		
+		// 페이지값 확인
+		int pageNum = 1;
+		if(map.get("pageNum") != null ) {
+			pageNum = Integer.parseInt(map.get("pageNum"));
+		}
+		
+		
+		String nickname=(String)session.getAttribute("nickname");
+		
+		
+		
+		//검색값에 페이지값 세팅
+				if(map.get("slt") != null) {
+					model.addAttribute("slt",search);
+				}
+				
+				
+				if(map.get("selectdate") != null) {
+					model.addAttribute("selectdate",selectdate);
+				}
+				
+				
+				
+				if(search == null) {
+					search="";
+				}
+				
+				if(selectdate == null) {
+					selectdate="최신순";
+					
+				}
+				
+		
+		
+				Map<String, Object> checkcount= new HashMap <String, Object>();
+				
+				
+				checkcount.put("nickname", nickname);
+				checkcount.put("search", search);
+				System.out.println(checkcount);
+		
+		
+		// 페이지값 초기화 |pageNum을 제외한
+		int totalCount = Adminservice.getinformywritecount(checkcount); // 멤버 총인원
+		int listNum = 10;
+		if(map.get("listNum")!=null) {
+			listNum = Integer.parseInt(map.get("listNum")); 
+		}
+		int blockNum = 10;
+		PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+		//페이징값 세팅
+		pdto.setPaging();
+		
+		
+		model.addAttribute("pdto",pdto); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		// 있는 페이지 값으로 DB에서 원하는 List값 가져오기
+		Map<String, Object> pstr= new HashMap<String, Object>();
+		
+		
+	
+		 String selectdatesql = (selectdate.equals("최신순")) ? "regdate desc" : "regdate asc";
+		
+		 System.out.println(selectdatesql);
+		 
+		pstr.put("selectdatesql", selectdatesql);
+		pstr.put("search", search);
+		pstr.put("nickname", nickname);
+		pstr.put("listNum", pdto.getListNum());
+		pstr.put("start_rownum", pdto.getStart_rownum()-1);
+		
+		System.out.println(pstr);
+		
+		List<MywritelistDTO> list = Adminservice.getinfomywritelistPaging(pstr);
+		
+		
+		model.addAttribute("list",list); // xml 에 paging dto값을 주고 원하는 페이지의 memberlist값을 가져온다.
+		
+		System.out.println("이거 오나?" + list);
+		
+		
+		view = "membermybatis/mywritelist";
+		
+		return view;		
+		
+	}	
+	
+	
+	
+	
 
 
 }

@@ -20,7 +20,7 @@ ORDER BY no ASC
 	<insert id="insertAlram" parameterType="com.myweb.dto.AlarmDTO" >
 	 <![CDATA[
 		insert into alarm (toid , fromid , bidx , title , category ,bgidx,step) 
-		values (#{toid},#{fromid},#{bidx},#{title},#{category},#{bgidx},#{bgidx})
+		values (#{toid},#{fromid},#{bidx},#{title},#{category},#{bgidx},#{step})
 ]]>
 </insert>
 
@@ -29,6 +29,13 @@ ORDER BY no ASC
 
 <select id="alramList" resultType="com.myweb.dto.AlarmDTO">
 <![CDATA[
+		select * from alarm where toid = #{toid} And readcheck = 1 And fromid != #{toid}
+]]>
+</select>
+
+
+<select id="getmembers" resultType="com.myweb.dto.AlarmDTO">
+<![CDATA[
 		select * from alarm where toid = #{toid}
 ]]>
 </select>
@@ -36,9 +43,40 @@ ORDER BY no ASC
 
 <select id="checkcount" resultType="int">
 <![CDATA[
-		select count(*) from alarm where toid = #{toid}
+		select count(*) from alarm where toid = #{toid} And readcheck = 1 And fromid != #{toid}
 ]]>
 </select>
+
+
+<select id="getadminrereinfo" resultType="com.myweb.dto.ReplyDTO">
+<![CDATA[
+
+	SELECT *
+FROM p_reply
+WHERE grp = #{bidx}
+ORDER BY regdate DESC
+LIMIT 1;
+]]>
+</select>
+
+<select id="getwriteradmininfo" resultType="com.myweb.dto.ReplyDTO">
+<![CDATA[
+
+	SELECT *
+FROM p_reply
+WHERE idx = #{idx}
+
+]]>
+</select>
+
+<select id="getadminidx" resultType="int">
+<![CDATA[
+
+	select * from p_reply order by grp desc limit 1;
+
+]]>
+</select>
+
 
 <select id="alarmClick" resultType="com.myweb.dto.QnaDTO">
 <![CDATA[
@@ -58,5 +96,19 @@ ORDER BY no ASC
 		DELETE FROM alarm WHERE idx=#{idx }
 			]]>
 	</delete>
+
+
+
+<update id="alarmRead" parameterType="int">
+    <![CDATA[
+    UPDATE alarm
+    SET readcheck = readcheck - 1
+    WHERE idx = #{idx}
+    ]]>
+</update>
+
+
+
+
 
 </mapper>

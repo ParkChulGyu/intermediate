@@ -21,12 +21,13 @@ public interface QnaService {
 	
 	public List<QnaDTO> Qna_list();
 	
+	List<QnaDTO> getinformationqnalist(Map<String, Object> pstr);
 	
 	
 	public void insertFile(QnaDTO dto);
-	
-	
 
+	List<QnaDTO> getMemberPaging(Map<String, Object> pstr);
+	
 	public int read(int idx) throws Exception;
 	
 	
@@ -42,7 +43,11 @@ public interface QnaService {
 	public void insertQna(QnaDTO dto);
 	
 	public void rootupdate();
+	
+	int getQnacount(String search)  throws Exception;
 
+	int getinfoQnacount(String nickname)  throws Exception;
+	
 	
 	
 }

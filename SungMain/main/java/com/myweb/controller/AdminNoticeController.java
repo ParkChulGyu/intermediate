@@ -29,9 +29,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.myweb.dto.AdminNoticeDTO;
+import com.myweb.dto.AlarmDTO;
 import com.myweb.dto.PagingDTO;
 import com.myweb.dto.ReplyDTO;
 import com.myweb.service.AdminNoticeService;
+import com.myweb.service.AlarmService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +51,10 @@ public class AdminNoticeController{
 	@Autowired
 	@Qualifier("AdminNoticeServiceImpl")
 	AdminNoticeService service;
+	
+	@Autowired
+	@Qualifier("AlarmServiceImpl")
+	AlarmService alarm;
 	
 	
 	
@@ -123,13 +129,10 @@ public class AdminNoticeController{
 	
 	
 	@GetMapping("adminview")
-	public String adminview(Model model, int idx, int totalcount) throws Exception {
+	public String adminview(Model model, int idx) throws Exception {
 		
-			totalcount = totalcount + 1;
-		AdminNoticeDTO dto = new AdminNoticeDTO();
-		dto.setTotalcount(totalcount);
-		dto.setIdx(idx);
-		service.updatecount(dto);
+		
+		service.updatecount(idx);
 		
 		model.addAttribute("one",service.getBoradone(idx));
 		model.addAttribute("lastidx",service.getMove(idx).getLastidx());
@@ -158,10 +161,7 @@ public class AdminNoticeController{
 	@GetMapping("adminviewmove")
 	public String adminviewmove(int idx,Model model,int totalcount) throws Exception {
 		
-		AdminNoticeDTO dto = new AdminNoticeDTO();
-		dto.setTotalcount(totalcount);
-		dto.setIdx(idx);
-		service.updatecount(dto);
+		service.updatecount(idx);
 		
 		model.addAttribute("one",service.getBoradone(idx));
 		
@@ -220,7 +220,6 @@ public class AdminNoticeController{
 		replyList = service.replyanswerList(dto);
 		
 		
-		System.out.println("replyLIst countcheck " + replyList.size() );
 		
 		
 		
@@ -233,15 +232,22 @@ public class AdminNoticeController{
 		
 		ReplyDTO dto = new ReplyDTO();
 		
+		
+		
 		dto.setBidx(idx);
 		
 		dto.setGrp(grp);
 		
-		dto.setGrpl(1);
+		dto.setGrpl(grpl);
 		
 		ArrayList<ReplyDTO> replyList = new ArrayList();
 		
 		replyList = service.showrereply(dto);
+		
+		
+		for (ReplyDTO reply : replyList) {
+			reply.setBbidx(idx); // 여기서 dto.getIdx() 대신에 적절한 값으로 대체해야 합니다.
+		}
 	
 		
 		
@@ -255,7 +261,28 @@ public class AdminNoticeController{
 		
 		ReplyDTO dto = new ReplyDTO();
 		
+		
 		dto.setIdx(idx);
+		dto.setBidx(bidx);
+		dto.setGrp(grp);
+		dto.setGrpl(grpl);
+		
+		
+		return dto;
+	}
+
+	@ResponseBody
+	@RequestMapping("rererewritebutton")
+	public ReplyDTO rererewritebutton(@RequestParam String idx,@RequestParam String bidx,@RequestParam String bbidx,@RequestParam int grp, @RequestParam int grpl, HttpSession session){
+		
+		ReplyDTO dto = new ReplyDTO();
+		
+		dto.setIdx(idx);
+		String toname = service.getname(idx);
+		
+		
+		dto.setWriter(toname);
+		dto.setBbidx(bbidx);
 		dto.setBidx(bidx);
 		dto.setGrp(grp);
 		dto.setGrpl(grpl);
@@ -268,12 +295,18 @@ public class AdminNoticeController{
 	
 	@ResponseBody
 	@RequestMapping("picture_write_rereply")
-	public ReplyDTO write_rereply(@RequestParam String idx,@RequestParam String bidx,@RequestParam String content, HttpSession session) throws Exception{
+	public ReplyDTO write_rereply(@RequestParam String grpls, @RequestParam String idx,@RequestParam String bidx,@RequestParam String content, HttpSession session) throws Exception{
+		
+		
+		
 		ReplyDTO dto = new ReplyDTO();
 		dto.setBidx(bidx);
+		int grpl = Integer.parseInt(grpls);
+		String matchgrp =  service.matchgrp(bidx);
 		dto.setGrp(Integer.parseInt(idx));
-		dto.setGrpl(1);
-		dto.setContent(content);  
+		dto.setGrpl(grpl);
+		dto.setContent(content);
+		
 		dto.setWriter((String) session.getAttribute("nickname"));
 		int check = service.p_reply_max_Grps(dto);
 		dto.setGrps(check);
@@ -281,11 +314,44 @@ public class AdminNoticeController{
 		service.pictureWriteReReply(dto);
 			
 		
-		
 		dto.setGrps(check+1);
 		
 		
+		
 		service.pictureWriteReplyupdateGrpas(dto);
+		
+		
+		
+		
+		ReplyDTO reply = new ReplyDTO();
+		ReplyDTO writer = new ReplyDTO();
+		
+		
+		
+		String category = "admin";
+		int idxx = Integer.parseInt(idx);
+		writer = alarm.getwriteradmininfo(idxx);
+		reply = alarm.getadminrereinfo(idxx);
+		
+		AlarmDTO alarmd = new AlarmDTO();
+		
+		alarmd.setFromid(reply.getWriter());
+		alarmd.setToid(writer.getWriter());
+		alarmd.setTitle(reply.getContent());
+		alarmd.setCategory(category);
+		alarmd.setBgidx(Integer.parseInt(reply.getIdx()));
+		alarmd.setBidx(Integer.parseInt(bidx));
+		alarmd.setStep(idxx);
+		
+			alarm.insertAlram(alarmd);
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -300,7 +366,7 @@ public class AdminNoticeController{
 	
 	@ResponseBody
 	@RequestMapping("picture_write_reply")
-	public ReplyDTO write_reply(@RequestParam String idx,@RequestParam String content, HttpSession session) throws Exception{
+	public ReplyDTO write_reply(@RequestParam String idx,@RequestParam String content, HttpSession session,String toid, String fromid, String title) throws Exception{
 		
 		ReplyDTO dto = new ReplyDTO();
 		
@@ -310,7 +376,8 @@ public class AdminNoticeController{
 		ArrayList<ReplyDTO> replyList = new ArrayList();
 		
 		replyList = service.replyList(dto);
-	
+			
+			
 		
 		
 		
@@ -330,6 +397,21 @@ public class AdminNoticeController{
 			  dto.setGrp(check);
 			 service.pictureWriteReplyupdate(dto);
 		}
+		
+		AlarmDTO alarms = new AlarmDTO();
+		String category = "admin";
+		alarms.setToid(toid);
+		alarms.setBidx(Integer.parseInt(idx));
+		alarms.setTitle(content);
+		alarms.setFromid(fromid);
+		alarms.setCategory(category);
+		
+		int bgidx = alarm.getadminidx();
+		
+		alarms.setBgidx(bgidx);
+		alarms.setStep(bgidx);
+		
+		alarm.insertAlram(alarms);
 		
 		
 		
@@ -355,14 +437,25 @@ public class AdminNoticeController{
 		return  result;
 		
 	}
+	
+	
+	
 	@ResponseBody
 	@RequestMapping("rereply_delete")
-	public int rereply_delete(@RequestParam String idx,@RequestParam String bidx, HttpSession session) throws Exception{
+	public int rereply_delete(@RequestParam String grpls, @RequestParam String idx,@RequestParam String bidx, HttpSession session) throws Exception{
 		
 		ReplyDTO dto = new ReplyDTO();
 		
+		int grpl = Integer.parseInt(grpls);
 		dto.setIdx(idx);
+		dto.setBidx(bidx);
+		dto = service.getonemember(idx);
 		
+		dto.setWriter((String) session.getAttribute("nickname"));
+		int check = service.p_reply_max_Grps(dto);
+		dto.setGrps(check-1);
+		
+		service.pictureWriteReplydeleteGrpas(dto);
 		
 		
 		
@@ -417,24 +510,24 @@ public class AdminNoticeController{
 		    String nickname = mrequest.getParameter("nickname");
 		    String content = mrequest.getParameter("content");
 		    String title = mrequest.getParameter("title");
-		    String[] category = mrequest.getParameterValues("cate");
+		   // String[] category = mrequest.getParameterValues("cate");
 		    StringBuffer cateBuf = new StringBuffer();
-		    if (category == null) {
-		        cateBuf.append("선택 없음");
-		    }
-		    else {
-		        for (String s : category) {
-		            cateBuf.append(s + ", ");
-		        }
-		    }
+		    //if (category == null) {
+		    //    cateBuf.append("선택 없음");
+		   // }
+		   // else {
+		    //    for (String s : category) {
+		     //       cateBuf.append(s + ", ");
+		     //   }
+		   // }
 
-System.out.println("category.toString() check : " + category.toString());
+//System.out.println("category.toString() check : " + category.toString());
 		    
 		    // 5. DTO 생성
 		    AdminNoticeDTO dto = new AdminNoticeDTO();
 		    dto.setNickname(nickname);
 		    dto.setTitle(title);
-		    dto.setCategory(category.toString());
+		  //  dto.setCategory(category.toString());
 		    dto.setOfile(fileName);
 		    dto.setSfile(newFileName);
 		    dto.setContent(content);

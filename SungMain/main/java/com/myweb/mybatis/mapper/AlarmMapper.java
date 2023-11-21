@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.myweb.dto.AlarmDTO;
 import com.myweb.dto.QnaDTO;
+import com.myweb.dto.ReplyDTO;
 
 @Mapper
 public interface AlarmMapper {	
@@ -28,6 +29,15 @@ public interface AlarmMapper {
 	
 	public int checkcount(String toid) throws Exception;
 			
-			
+	public ReplyDTO getadminrereinfo(int bidx) throws Exception;
+	
+	public ReplyDTO getwriteradmininfo(int idx) throws Exception;
+	
+	public int getadminidx() throws Exception;
+	
+	public void alarmRead(int idx);
+	
+	public List<AlarmDTO> getmembers(String toid);
+
 			
 }

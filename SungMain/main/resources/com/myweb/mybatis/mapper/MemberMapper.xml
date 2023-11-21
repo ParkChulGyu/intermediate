@@ -129,4 +129,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
+	<delete id="removeqnaone"
+		parameterType="int">
+		 <![CDATA[
+		delete from  qna
+		where idx = #{idx}
+		 ]]>
+	</delete>
+
+	<delete id="removeadminone"
+		parameterType="int">
+		 <![CDATA[
+		delete from  admin
+		where idx = #{idx}
+		 ]]>
+	</delete>
+
+
+
+
+
+
+
+
 </mapper>

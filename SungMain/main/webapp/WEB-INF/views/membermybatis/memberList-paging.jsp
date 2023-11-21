@@ -3,33 +3,47 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="loginCheck-mapper.jsp" />
+
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/pagination.css">
+
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/pagination.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/pagination.css">
+
+
+
+
+
+
+
+
 
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
 <meta charset="UTF-8">
 <title>memberList.jsp</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/adminpage.css">
 </head>
 <body>
 <%@include file="../topmenu.jsp" %>
 <!-- 탑메뉴 넣기-->
+<main>
+<%@include file="adminsubmenu.jsp" %>
 
+
+<div class="memberlist-paging">
 <h2>페이징 값 확인</h2>
 <hr>
 <p>Total Count: <c:out value="${pdto.totalCount}" /></p>
-<p>page	 Num: <c:out value="${pdto.pageNum}" /></p>
-<p>list Num: <c:out value="${pdto.listNum}" /></p>
-<p>block Num: <c:out value="${pdto.blockNum}" /></p>
-<p>start Page: <c:out value="${pdto.startPage}" /></p>
-<p>end   Page: <c:out value="${pdto.endPage}" /></p>
-<p>is	 Prev: <c:out value="${pdto.isPrev}" /></p>
-<p>is	 Next: <c:out value="${pdto.isNext}" /></p>
-<p>is	 BPrev: <c:out value="${pdto.isBPrev}" /></p>
-<p>is	 BNext: <c:out value="${pdto.isBNext}" /></p>
-<hr>
-<p>list: <c:out value="${list}" /></p>
-<hr>
+
+
 
 <form action="/web/membermybatis/memberList-paging" method="post">
 							<select name="listNum"
@@ -59,6 +73,16 @@
 					<label for="th_checkAll">전체선택</label>
 	        		<input type="checkbox" id="th_checkAll" onclick="checkAll();">
 					</td></tr>
+					<tr>
+					<th>이름</th>
+					<th>아이디</th>
+					<th>이름</th>
+					<th>이름</th>
+					<th>이름</th>
+					<th>이름</th>
+					<th>이름</th>
+					</tr>
+			
 			<c:forEach items="${list}" var="MemberDTO">
 					<tr>
 					<!-- 다른 필드들도 필요에 따라 출력 -->
@@ -72,41 +96,65 @@
 			</table>
 		
 			<!-- 페이징 처리값 세팅 -->
-		<div class="pagination">
-		<c:if test="${pdto.isPrev eq true }">
-		<button class="page-btn">
-    		<a href="/web/membermybatis/memberList-paging?pageNum=${pdto.pageNum - 1}&str=${str}">이전</a>
-		</button>
+		<div class="pagebtn">
+			<ul class="pagination">
+				<c:if test="${pdto.isPrev eq true }">
+					<li class="page-btn"><a
+						href="/web/membermybatis/memberList-paging?pageNum=${pdto.pageNum - 1}&str=${str}&listNum=${pdto.listNum}">이전</a>
+					</li>
+				</c:if>
+				<c:forEach begin="${pdto.startPage}" end="${pdto.endPage}"
+					var="pageNumber">
 
-		</c:if>
-		
-		
-		<c:forEach begin="${pdto.startPage}" end="${pdto.endPage}" var="pageNumber">
-				
-				<c:choose>
-					<c:when test="${pageNumber eq pdto.pageNum}">
-				        <button >${pageNumber}</button>
-					</c:when>
-					<c:otherwise>
-						<button class="page-btn">
-    						<a href="/web/membermybatis/memberList-paging?pageNum=${pageNumber}&str=${str}">${pageNumber}</a>
-						</button>
+					<c:choose>
+						<c:when test="${pageNumber eq pdto.pageNum}">
+							<li class="page-btn"><a href="javascript:void(0);"
+								style="cursor: default;">${pageNumber}</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-btn"><a
+								href="/web/membermybatis/memberList-paging?pageNum=${pageNumber}&str=${str}&listNum=${pdto.listNum}">${pageNumber}</a>
+							</li>
 
-					</c:otherwise>
-				</c:choose>
-				
-		</c:forEach>
+						</c:otherwise>
+					</c:choose>
+
+				</c:forEach>
+				<c:if test="${pdto.isNext eq true }">
+					<li class="page-btn"><a
+						href="/web/membermybatis/memberList-paging	?pageNum=${pdto.pageNum + 1}&str=${str}&listNum=${pdto.listNum}">다음</a>
+					</li>
+				</c:if>
+			</ul>
 		
-        
-        
-        <c:if test="${pdto.isNext eq true }">
-        <button class="page-btn">
-    						<a href="/web/membermybatis/memberList-paging?pageNum=${pdto.pageNum + 1}&str=${str}">다음</a>
-		</button>
-		</c:if>
-    </div>
-			<!-- 체크박스 값들 한번에 체크하는 기능-->
+		<hr >
+		</div>
+		
+		
  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  <script>
 //체크박스 전체선택, 전체 해체	
 	function checkAll() {
@@ -168,5 +216,6 @@ $(function(){ // onload 삭제
  </script>	
     
     
+</main>
 </body>
 </html>

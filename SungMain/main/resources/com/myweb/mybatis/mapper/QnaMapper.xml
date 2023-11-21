@@ -21,10 +21,92 @@ FROM (
     ORDER BY
         root, step ASC
 ) AS q
+where  1= 1
+And (content LIKE CONCAT('%',#{search},'%')
+OR title LIKE CONCAT('%',#{search},'%'))
 ORDER BY
-    no ASC;  
+    no ASC
+     limit #{listNum} offset #{start_rownum}
 		]]>
 	</select>
+	
+	
+	<select id="getQnacount" resultType="int">
+        <![CDATA[
+        
+        select count(*)
+        from qna WHERE 1=1
+		AND (content LIKE CONCAT('%',#{search},'%')
+		OR title LIKE CONCAT('%',#{search},'%'))
+        ]]>
+        
+	</select>
+
+	<select id="getinfoQnacount" resultType="int">
+        <![CDATA[
+        
+        select count(*)
+        from qna WHERE writer = #{writer}
+		
+        ]]>
+        
+	</select>
+	
+	<select id="getinformationqnalist" resultType="com.myweb.dto.QnaDTO">
+        <![CDATA[
+        
+  SELECT * FROM (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (ORDER BY regdate DESC) AS no
+    FROM
+        qna
+) AS q
+WHERE
+    writer = #{nickname}
+LIMIT #{listNum} OFFSET #{start_rownum}  
+        
+        
+        
+        ]]>
+        
+	</select>
+	
+       
+	
+	
+	
+	
+	
+	
+	<select id="getMemberPaging"
+		parameterType="Map"
+		resultType="com.myweb.dto.QnaDTO">
+        <![CDATA[
+       SELECT
+    *
+    
+FROM (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (ORDER BY root, step ASC) AS no
+    FROM
+        qna
+    
+    ORDER BY
+        root, step ASC
+) AS q
+where  1= 1
+And (content LIKE CONCAT('%',#{search},'%')
+OR title LIKE CONCAT('%',#{search},'%'))
+ORDER BY
+    no ASC
+     limit #{listNum} offset #{start_rownum}
+        ]]>
+	</select>
+	
+	
+	
 	
 	
 	
@@ -84,6 +166,9 @@ ORDER BY
         VALUES ( #{root}, #{title}, #{content}, #{writer}, #{step}, #{indent}, #{filename, jdbcType=VARCHAR}, #{filepath, jdbcType=VARCHAR})
     ]]>
 </insert>
+
+
+
 
 
 </mapper>

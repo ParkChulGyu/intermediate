@@ -3,6 +3,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?v=<%=new java.util.Date().getTime() %>">
+     
 
 <%
 	String errorMessage = request.getParameter("errorMessage");
@@ -38,22 +41,52 @@
     }
 </script>
 <body>
-<h2>파일 업로드</h2>
-<hr>
-    <span style="color: red;"><%=errorMessage%></span>
+<main>
+
+
+<div class="maintitle">
+
+		<h2>Q&A</h2>
+</div>
+
+<div class="Replyjsp">
     <form name="fileForm" method="post" enctype="multipart/form-data"
           action="fileUploadAction" onsubmit="return validateForm(this);">
-        작성자 : <input type="text" name="nickname" value=<%=session.getAttribute("nickname") %> /><br />
-        제목 : <input type="text" name="title" value="title" /><br /> 
-        카테고리(선택사항) : 
-            <input type="checkbox" name="cate" value="사진" checked />사진 
-            <input type="checkbox" name="cate" value="과제" />과제 
-            <input type="checkbox" name="cate" value="워드" />워드 
-            <input type="checkbox" name="cate" value="음원" />음원 <br /> 
-        첨부파일 : <input type="file" name="attachedFile" /> <br />
-           내용 : <input type="text" name="content" value="hong" /><br />
-        <input type="submit" value="전송하기" />
+
+          <table class="ReplyList-write">
+          
+          <tr>
+          <th class="w-px160 ReplyListline">제목</th>
+          <td class="Replylinetd"><input type="text" name="title" class="need reply-input" /></td>
+		 </tr>
+          	<tr>
+          			<th class="ReplyListline">작성자</th>
+          			<td class="Replylinetd">
+          			<input class="reply-input"type="text" name="nickname" value=<%=session.getAttribute("nickname") %> />
+					</td>          			
+          	</tr>
+          	<tr>
+          	<th class="ReplyListline">내용 </th>
+          	<td class="Replylinetd"><textarea name="content" class="reply-textarea"></textarea>
+          	</tr>
+          	<tr>
+          		<th class="ReplyListline">
+          		첨부파일
+          		</th>
+          		<td class="left Replylinetd"><input type="file" name="attachedFile" />
+          		
+          	</tr>
+		</table>
+	
+	<div class="btnSet">
+        <input  class="btn-fill" type="submit" value="저장" >
+        <a class="btn-empty" href="adminlist">취소</a>
+	</div>
     </form>
+	</div>		     
+       
+       
+ </main>
 </body>
 </html>
 

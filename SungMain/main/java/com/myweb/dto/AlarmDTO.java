@@ -14,7 +14,7 @@ public class AlarmDTO {
 	    private String category;
 	    private int bgidx;
 	    private int step;
-    
+	    private String content;
 	
 	
 }

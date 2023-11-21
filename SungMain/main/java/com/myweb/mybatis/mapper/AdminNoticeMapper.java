@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.myweb.dto.AdminNoticeDTO;
 import com.myweb.dto.MoveDTO;
+import com.myweb.dto.MywritelistDTO;
+import com.myweb.dto.QnaDTO;
 import com.myweb.dto.ReplyDTO;
 
 @Mapper
@@ -23,8 +25,12 @@ public interface AdminNoticeMapper {
 	List<AdminNoticeDTO> getMemberPaging(Map<String, Object> pstr);
 	
 	int insertFile(AdminNoticeDTO dto) throws Exception;
+	
+	
+	public int pictureWriteReplydeleteGrpas(ReplyDTO dto) throws Exception;
+	
 
-	int updatecount(AdminNoticeDTO dto) throws Exception;
+	int updatecount(int idx) throws Exception;
 
 	int getMove(AdminNoticeDTO dto) throws Exception;
 	
@@ -53,5 +59,23 @@ public interface AdminNoticeMapper {
 
 
 	ArrayList<ReplyDTO> replyanswerList(ReplyDTO dto);
+	
+	int getinfoadmincount(String nickname)  throws Exception;
+	
+	List<AdminNoticeDTO> getinformationadminPaging(Map<String, Object> pstr);
+	
+	int getinforeplycount(String nickname)  throws Exception;
+
+	List<ReplyDTO> getinformationareplyPaging(Map<String, Object> pstr);
+	
+	int getinformywritecount(Map<String, Object> checkcount)  throws Exception;
+	
+	List<MywritelistDTO> getinfomywritelistPaging(Map<String, Object> pstr);
+	
+	String getname(String idx );
+	
+	String matchgrp(String bidx );
+	
+	ReplyDTO getonemember(String idx);
 
 }

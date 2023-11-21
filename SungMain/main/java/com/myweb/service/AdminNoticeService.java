@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.myweb.dto.AdminNoticeDTO;
 import com.myweb.dto.MemberDTO;
 import com.myweb.dto.MoveDTO;
+import com.myweb.dto.MywritelistDTO;
 import com.myweb.dto.PagingDTO;
+import com.myweb.dto.QnaDTO;
 import com.myweb.dto.ReplyDTO;
 
 
@@ -29,7 +31,7 @@ public interface AdminNoticeService {
 	
 	int insertFile(AdminNoticeDTO dto) throws Exception;
 
-	int updatecount(AdminNoticeDTO dto) throws Exception;
+	int updatecount(int idx) throws Exception;
 	
 	
 	public ArrayList<ReplyDTO> replyList(ReplyDTO dto) ;
@@ -37,6 +39,8 @@ public interface AdminNoticeService {
 	public ArrayList<ReplyDTO> showrereply(ReplyDTO dto) ;
 	
 	public int pictureWriteReReply(ReplyDTO dto) throws Exception;
+
+	public int pictureWriteReplydeleteGrpas(ReplyDTO dto) throws Exception;
 
 	public int pictureWriteReply(ReplyDTO dto) throws Exception;
 
@@ -53,5 +57,25 @@ public interface AdminNoticeService {
 	public int DeleteReReply(ReplyDTO dto) throws Exception;
 	
 	public ArrayList<ReplyDTO> replyanswerList(ReplyDTO dto) ;
+	
+	int getinfoadmincount(String nickname)  throws Exception;
+	
+	List<AdminNoticeDTO> getinformationadminPaging(Map<String, Object> pstr);
+	
+	int getinforeplycount(String nickname)  throws Exception;
+	
+	List<ReplyDTO> getinformationareplyPaging(Map<String, Object> pstr);
+	
+	int getinformywritecount(Map<String, Object> checkcount)  throws Exception;
+	
+	List<MywritelistDTO> getinfomywritelistPaging(Map<String, Object> pstr);
+	
+	
+	String getname(String idx );
+	
+	String matchgrp(String bidx );
+	
+	ReplyDTO getonemember(String idx);
+	
 	
 }

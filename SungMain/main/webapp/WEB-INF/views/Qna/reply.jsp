@@ -6,6 +6,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
      
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?v=<%=new java.util.Date().getTime() %>">
 
 	<%
 	String nickname = (String) session.getAttribute("nickname"); 
@@ -21,39 +23,39 @@
 <head>
 <meta charset="UTF-8">
 <title>New.jsp</title>
+<%@include file="../topmenu.jsp" %>
 </head>
 <body>
-<%@include file="../topmenu.jsp" %>
-<!--
-파일 첨부 시 form 태그가 반드시 가져야 할 속성
-method="post"
-enctype="multipart/form-data"
-  -->
-  
-  
- dfd ${dto.idx }
+
+<div class="Replyjsp">
+ 
+<div class="maintitle">
+
+		<h2>Q&A</h2>
+</div>
+ ${dto.idx }
 <form action="reply_insert" method="post" enctype="multipart/form-data">    
 	<input type="hidden" name="idx" value="${dto.idx }"/>
 	<input type="hidden" name="root" value="${dto.root }" />
 	<input type="hidden" name="step" value="${dto.step }" />
 	<input type="hidden" name="indent" value="${dto.indent }" />
 	
-	<table>
+	<table class="ReplyList">
 		<tr>
-			<th class="w-px160">제목</th>
-			<td><input type="text" name="title" class="need" /></td>
+			<th class="w-px160 ReplyListline">제목</th>
+			<td class="Replylinetd"><input  type="text" name="title" class="need reply-input" /></td>
 		</tr>
 		<tr>
-			<th>작성자</th>
-			<td>${nickname}</td>
+			<th class="ReplyListline">작성자</th>
+			<td class="Replylinetd">${nickname}</td>
 		</tr>
 		<tr>
-			<th>내용</th>
-			<td><textarea name="content" class="need"></textarea></td>
+			<th class="ReplyListline">내용</th>
+			<td class="Replylinetd"><textarea name="content" class="need reply-textarea"></textarea></td>
 		</tr>
 		<tr>
-			<th>파일 첨부</th>
-			<td class="left">
+			<th class="ReplyListline">파일 첨부</th>
+			<td class="left Replylinetd">
 				<label>
 					<input type="file" name="file" id="attach-file" />
 					<!-- <img src="img/select.png" class="file-img" /> -->
@@ -72,6 +74,9 @@ enctype="multipart/form-data"
 	<a class="btn-fill" onclick="if(necessary()) $('form').submit()">저장</a>
 	<a class="btn-empty" href="detail?idx=${dto.idx }">취소</a>
 </div>
+
+
+</div> 
 
 
 

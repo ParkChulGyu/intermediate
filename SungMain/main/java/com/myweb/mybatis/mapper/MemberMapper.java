@@ -40,6 +40,10 @@ public int totalCount(String search) ;
 	
 	public int updatePw(MemberDTO dto) throws Exception;
 	
+	int removeqnaone(int idx) throws Exception;
+	
+	public int removeadminone(int idx) throws Exception;
+	
 	
 	
 	

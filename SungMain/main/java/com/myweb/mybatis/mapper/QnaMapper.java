@@ -1,6 +1,7 @@
 package com.myweb.mybatis.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,6 +13,16 @@ public interface QnaMapper {
 	
 	public List<QnaDTO> Qna_list();	
 	
+	public List<QnaDTO> getinformationqnalist(String nickname);
+
+	
+	
+	
+	int getQnacount(String search)  throws Exception;
+	
+	List<QnaDTO> getMemberPaging(Map<String, Object> pstr);
+	
+	List<QnaDTO> getinformationqnalist(Map<String, Object> pstr);
 			
 	public void insertFile(QnaDTO dto);
 	
@@ -31,6 +42,9 @@ public interface QnaMapper {
 	public void insertQna(QnaDTO dto);
 
 	public void rootupdate();
+	
+	int getinfoQnacount(String nickname)  throws Exception;
+	
 
 
 }

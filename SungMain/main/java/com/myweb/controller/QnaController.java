@@ -1,9 +1,13 @@
 package com.myweb.controller;
 
 import java.io.File;
+import java.net.http.HttpHeaders;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -15,19 +19,25 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.myweb.dto.AdminNoticeDTO;
+import com.myweb.dto.PagingDTO;
 import com.myweb.dto.QnaDTO;
 import com.myweb.service.CommonService;
 import com.myweb.service.QnaService;
 import com.oreilly.servlet.MultipartRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("Qna")
@@ -48,11 +58,70 @@ public class QnaController{
 	
 	//공지사항 목록화면 요청
 	@RequestMapping("Qna")
-	public String list(Model model,HttpSession session) {
+	public String list(Model model,HttpSession session, 
+			@RequestParam Map<String, String> map) throws Exception {
 	
+		
+		QnaDTO dto = new QnaDTO();
+		
+		String search = "";
+		
+		if(map.get("slt") != null || map.get("str") != null ) {
+			search = map.get("str"); // 검색 밸류
+			}
+		
+		
+		// 페이지값 확인
+				int pageNum = 1;
+				if(map.get("pageNum") != null ) {
+					pageNum = Integer.parseInt(map.get("pageNum"));
+				}
+				
+				
+		//검색값에 페이지값 세팅
+				if(map.get("str") != null) {
+					model.addAttribute("str",search);
+				}
+				
+			int totalCount = service.getQnacount(search); // 멤버 총인원
+			int listNum = 10;
+			
+			if(map.get("listNum")!=null) {
+				listNum = Integer.parseInt(map.get("listNum")); 
+			}
+			
+			int blockNum = 10;
+			PagingDTO pdto = new PagingDTO(totalCount, pageNum, listNum, blockNum);
+			//페이징값 세팅
+			pdto.setPaging();
+			
+			model.addAttribute("pdto",pdto);
+			
+			Map<String, Object> pstr= new HashMap<String, Object>();
+			
+			if(search == null) {
+				search="";
+			}
+				pstr.put("search", search);
+				pstr.put("listNum", pdto.getListNum());
+				pstr.put("start_rownum", pdto.getStart_rownum()-1);
+				
+				List<QnaDTO> list = service.getMemberPaging(pstr);
+			
+				model.addAttribute("list",list);
+		
+		
+		
+		
 		//DB에서 공지 글 목록을 조회해와 목록 화면에 출력
-		model.addAttribute("list", service.Qna_list());
+		
 		session.setAttribute("category", "no");
+		
+		
+		
+		
+		
+		
 		return "Qna/Qna";
 		
 	}
@@ -68,7 +137,7 @@ public class QnaController{
 		public String insert(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
 			
 			try {
-				String saveDirectory = "D:/kdigital12307/spring2/spring2/intermediate2/file";  // 저장할 디렉터리
+				String saveDirectory = "D:\\kdigital12307\\spring2\\spring2\\intermediate3\\file\\";  // 저장할 디렉터리
 				int maxPostSize = 1024 * 1000;  // 파일 최대 크기(1MB)
 				String encoding = "UTF-8";  // 인코딩 방식
 			    // 1. MultipartRequest 객체 생성
@@ -95,10 +164,12 @@ public class QnaController{
 			    QnaDTO dto = new QnaDTO();
 			    dto.setWriter(Writer);
 			    dto.setTitle(title);
-			    dto.setFilename(fileName);
+			    dto.setFilename(newFileName);
 			    dto.setContent(content);
 			    dto.setFilepath(saveDirectory);
 			 
+			    
+			    
 			    // 6. DAO를 통해 데이터베이스에 반영
 			      service.insertFile(dto);
 			     
@@ -135,15 +206,73 @@ public class QnaController{
 		
 		@ResponseBody 
 		@RequestMapping("download")
-		public void download( int idx, HttpSession session, HttpServletResponse response) throws Exception{
+		public ResponseEntity<byte[]> download( int idx, HttpSession session, HttpServletResponse response) throws Exception{
 			 
-			
+			System.out.println("하위ㅇㄹㅇㄹ");
 			QnaDTO dto = service.detail(idx);
 			
-			common.download(dto.getFilename(), dto.getFilepath(), session, response);
+			
+			String filePath = "D:\\kdigital12307\\spring2\\spring2\\intermediate3\\file\\";
+			
+			String fileName =  dto.getFilename();
+			
+		
+			
+			
+			
+			
+			File file = new File(filePath + fileName);
+			byte[] fileContent = Files.readAllBytes(file.toPath());
+			
+			
+			
+			
+			org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			
+			String encodedFileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+			headers.setContentDispositionFormData("attachment", encodedFileName);
+			
+			return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+			
+			
+			
+			
+			
+			
+			//ResponseEntity<byte[]> fileContnet = common.download(fileName, filePath, session, response);
+					
+				
+			
+			
+			
 			
 			
 		}
+		
+		
+		 
+		
+//		
+//		   @RequestMapping(value = "/downloadFile") 
+//		   @ResponseBody
+//		   public ResponseEntity<byte[]> downloadFile(@RequestParam String filename) throws Exception {
+//		      
+//			   String filePath = "D:\\kdigital12307\\spring2\\spring2\\intermediate2\\file\\";
+//		      
+//		      
+//		   }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		// 삭제 처리 요청
@@ -178,7 +307,7 @@ public class QnaController{
 		public String update(  HttpServletRequest request,HttpSession session, String attach) throws Exception {
 			//원래 공지글의 첨부 파일 관련 정보를 조회
 			try {
-				String saveDirectory = "D:/kdigital12307/spring2/spring2/intermediate2/file";  // 저장할 디렉터리
+				String saveDirectory = "D:/kdigital12307/spring2/spring2/intermediate3/file";  // 저장할 디렉터리
 				int maxPostSize = 1024 * 1000;  // 파일 최대 크기(1MB)
 				String encoding = "UTF-8";  // 인코딩 방식
 			    // 1. MultipartRequest 객체 생성
@@ -196,10 +325,28 @@ public class QnaController{
 			    
 			    
 			    //기존에 있던 파일
+			    String fileName = mrequest.getFilesystemName("file");  // 현재 파일 이름
+			    String ext = fileName.substring(fileName.lastIndexOf("."));  // 파일 확장자
+			    String now = new SimpleDateFormat("yyyyMMdd_HmsS").format(new Date());
+			    String newFileName = now + ext;  // 새로운 파일 이름("업로드일시.확장자")
+			    // 3. 파일명 변경
+			    File oldFile = new File(saveDirectory + File.separator + fileName);
+			    File newFile = new File(saveDirectory + File.separator + newFileName);
+			    oldFile.renameTo(newFile);
+			    
+			    
+			    
 			    
 			     //update될 파일
 			     QnaDTO notice = service.detail(dto.getIdx());
-   			     String fileName = mrequest.getFilesystemName("file");  // 현재 파일 이름
+   			     fileName = newFileName;  // 현재 파일 이름
+   			  
+			 
+   			     
+   			 
+   			     
+   			     
+   			     
    			     
    			     if(fileName != null) {
    			    	 notice.setFilename(fileName);
@@ -288,7 +435,7 @@ public class QnaController{
 		public String reply_insert( HttpSession session,  HttpServletRequest request) {
 		
 			try {
-				String saveDirectory = "D:/kdigital12307/spring2/spring2/intermediate2/file";  // 저장할 디렉터리
+				String saveDirectory = "D:/kdigital12307/spring2/spring2/intermediate3/file";  // 저장할 디렉터리
 				int maxPostSize = 1024 * 1000;  // 파일 최대 크기(1MB)
 				String encoding = "UTF-8";  // 인코딩 방식
 			    // 1. MultipartRequest 객체 생성
@@ -296,7 +443,21 @@ public class QnaController{
 			                                               maxPostSize, encoding);
 
 			    // 2. 새로운 파일명 생성
+			    
+			    
+			    
 			    String fileName = mrequest.getFilesystemName("file");  // 현재 파일 이름
+			    String ext = fileName.substring(fileName.lastIndexOf("."));  // 파일 확장자
+			    String now = new SimpleDateFormat("yyyyMMdd_HmsS").format(new Date());
+			    String newFileName = now + ext;  // 새로운 파일 이름("업로드일시.확장자")
+			    // 3. 파일명 변경
+			    File oldFile = new File(saveDirectory + File.separator + fileName);
+			    File newFile = new File(saveDirectory + File.separator + newFileName);
+			    oldFile.renameTo(newFile);
+			    
+			    
+			    
+			     fileName = newFileName;  // 현재 파일 이름
 			    // 3. 파일명 변경
 
 			    // 4. 다른 폼값 받기

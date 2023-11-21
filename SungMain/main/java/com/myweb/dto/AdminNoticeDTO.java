@@ -6,7 +6,6 @@ import lombok.Data;
 public class AdminNoticeDTO {
 
 	
-	
 	private int idx;
     private String title;
     private String content;

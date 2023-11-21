@@ -2,7 +2,10 @@ package com.myweb.serviceimpl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,12 +16,16 @@ import java.util.UUID;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 import com.myweb.dto.AdminNoticeDTO;
 import com.myweb.dto.MoveDTO;
 import com.myweb.dto.ReplyDTO;
@@ -28,6 +35,8 @@ import com.myweb.mybatis.mapper.QnaMapper;
 import com.myweb.service.AdminNoticeService;
 import com.myweb.service.CommonService;
 import com.myweb.service.QnaService;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Service("CommonServiceImpl")
 public class CommonServiceImpl implements CommonService{
@@ -66,28 +75,41 @@ public class CommonServiceImpl implements CommonService{
 	}
 
 //첨부 파일 다운로드 처리///////////////////////////////////////////////////////
-	public File download(String filename, String filepath, HttpSession session, HttpServletResponse response) {
-		File file = new File(session.getServletContext().getRealPath("resources") + filepath);
-		//filepath에 resources/ << 슬래쉬부터의 경로가 저장되어 있다
-		String mime = session.getServletContext().getMimeType(filename);
+	public ResponseEntity<byte[]> download(String fileName, String filePath, HttpSession session, HttpServletResponse response) throws Exception {
 		
-		response.setContentType(mime);
+	      
+		System.out.println("하위 2"); 
 		
-		try {
-			filename = URLEncoder.encode(filename, "utf-8").replaceAll("\\+", "%20");
-			// + 는 기호라 \ 필요, \ 또한 기호라 \ 필요
-			// %20 = 스페이스바
+		
+	      File file = new File(filePath + fileName);
+	       byte[] fileContent = Files.readAllBytes(file.toPath());
+	      
+	       System.out.println("fileContent 2" + Arrays.toString(fileContent)); 
+	    
+	       
+	      
+	       HttpHeaders headers = new HttpHeaders();
+	       headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+	       String encodedFileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+	       headers.setContentDispositionFormData("attachment", encodedFileName);
+
+	       return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+
+	       
+	       
+	       String encodedFileContent = new String(fileContnet.getBytes("UTF-8"), "ISO-8859-1");
 			
-			response.setHeader("content-disposition", "attachment; filename=" + filename);
 			
-			ServletOutputStream out = response.getOutputStream();
-			FileCopyUtils.copy(new FileInputStream(file), out);
-			out.flush();
-			
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return file;
+		   String content = new String(fileContnet., StandardCharsets.UTF_8);
+	     
+		   
+		   
+		   System.out.println("File Content: " + content);
+	       
+	       
+		
+		
 	}
 
 

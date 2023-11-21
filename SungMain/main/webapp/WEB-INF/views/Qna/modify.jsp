@@ -3,8 +3,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
      
+     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?v=<%=new java.util.Date().getTime() %>">
+      <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
 
 
 
@@ -13,31 +15,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Qna.jsp</title>
+<%@include file="../topmenu.jsp" %>
 </head>
 <body>
-<%@include file="../topmenu.jsp" %>
-<h3>Q&A </h3>
+<main>
+<div class="Modifyjsp">
 
-<<!-- 
- - 파일 첨부 시 form 반드시 갖고 있어야 할 속성 
-	1. 반드시 method는 post이어야만 한다.
-	2. enctype을 지정한다. ▶ enctype='multipart/form-data'
--->
+<div class="maintitle">
+
+		<h2>수정</h2>
+</div>
+
+
 <form action="../Qna/update" method="post" enctype="multipart/form-data">                                        
 	<input type="hidden" name="idx" value="${dto.idx }"/>
 	<input type="hidden" name="attach" />
-	<table>
+	<table class="ModifyList">
 		<tr>
-			<th class="w-px160">제목</th>
-			<td><input class="need" type="text" name="title" value="${dto.title }"/></td>
+			<th class="w-px160 Modifyline">제목</th>
+			<td class="modifylinetd"><input class="need modify-input" type="text" name="title" value="${dto.title }"/></td>
 		</tr>
 		<tr>
-			<th>내용</th>
-			<td><textarea class="need" name="content">${dto.content }</textarea></td>
+			<th class="Modifyline">내용</th>
+			<td class="modifylinetd"><textarea class="need modify-input" name="content">${dto.content }</textarea></td>
 		</tr>
 		<tr>
-			<th>첨부 파일</th>
-			<td class="left">
+			<th class="Modifyline">첨부 파일</th>
+			<td class="left modifylinetd">
 				<label>
 					<input id="attach-file" type="file" name="file" />
 					<!-- <img src="img/select.png" class="file-img" /> -->
@@ -52,12 +56,15 @@
 		</tr>
 	</table>
 </form>
+
+
 <div class="btnSet">
 	<a class="btn-fill" onclick="if( necessary() ) { $('[name=attach]').val($('#file-name').text()); $('form').submit(); }">저장</a>
 	<a class="btn-empty" href="detail?idx=${dto.idx }">취소</a>
 	<!-- <a class="btn-empty" href="javascript:history.go(-1)">취소</a> -->
 </div>
 
+</div>
 
 
 <script>
@@ -106,5 +113,6 @@
 </script>
 
 
+</main>
 </body>
 </html>

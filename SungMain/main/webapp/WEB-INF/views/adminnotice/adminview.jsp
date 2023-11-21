@@ -29,118 +29,144 @@ String nickname = (String) session.getAttribute("nickname");
 <head>
 <meta charset="UTF-8">
 <title>adminview.jsp</title>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/top2.css">
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?v=<%=new java.util.Date().getTime() %>">
 </head>
 <body>
+
 	<%@include file="../topmenu.jsp"%>
+	<main>
+<div class="AdminViewjsp">
+<div class="AdminViewtopjsp">
+<div class="maintitle">
 
+		<h2>자유게시판</h2>
+</div>
 
-
-	<table>
+		<table class="AdminViewlList">
 		<tr>
-			<!-- 다른 필드들도 필요에 따라 출력 -->
-			<th>idx</th>
-			<th>>title</th>
-			<th>>content</th>
-			<th>>nickname</th>
-			<th>total count</th>
+		<td class="Adminviewline " style="padding-left: 25px;width: 130.646;"><%=one.getTitle()%></td>
+		<td class="Adminviewline inputsomething"><%=one.getNickname()%></td>
+		<td class="Adminviewline right " style="padding-right : 25px;"><%=one.getRegdate()%></td>
 		</tr>
 		<tr>
-
-			<td><%=one.getIdx()%></td>
-			<td><%=one.getTitle()%></td>
-			<td><%=one.getContent()%></td>
-			<td><%=one.getNickname()%></td>
-			<td><%=one.getRegdate()%></td>
-			<td><%=one.getTotalcount()%></td>
-
+		<td   colspan="3" class="left Viewtd"><%=one.getContent()%></td>
 		</tr>
-	</table>
+		
+		</table>
 
 
 
 
-
-	<div class="my-3 p-3 bg-white rounded shadow-sm">
-		<c:choose>
-			<c:when test="${nexttitle != null}">
-
-				<a
-					href="/web/adminnotice/adminview?idx=<%=nextidx%>&totalcount=<%=nexttotalcount%>">다음</a> : <%=nexttitle%>
-			</c:when>
-
-			<c:when test="${nexttitle == null}">
-				<a disabled>다음글이 없습니다</a>
-			</c:when>
-		</c:choose>
-		<br />
-		<c:choose>
-			<c:when test="${lasttitle != null}">
-				<a
-					href="/web/adminnotice/adminview?idx=<%=lastidx%>&totalcount=<%=lasttotalcount%>">이전</a> : <%=lasttitle%>
-			</c:when>
-
-			<c:when test="${lasttitle == null}">
-				<a>이전글이 없습니다</a>
-			</c:when>
-		</c:choose>
-
-	</div>
-
-
-
-
-
-
-
-
-
-	<a href="../adminnotice/adminlist">목록</a>
-
-	<!-- 댓글 -->
 
 	
-	<div class="collapse" id="reply_card${one.idx }">
-		<section class="modal-section">
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-							fill="currentColor" class="bi bi-chat-dots" viewBox="0 0 16 16"
-							onclick="ReplyList(${one.idx })">
-  <path
-								d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-  <path
-								d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z" />
-</svg>
-			<div class="card card-body">
-				<!-- 댓글 목록 -->
-				<div class="reply-list${one.idx }">
-					<!-- 댓글이 들어가는 곳 -->
+
+
+
+
+
+<div class="nextjsp">
+		<table class="AdminViewlList">
+			<c:choose>
+				<c:when test="${nexttitle != null}">
+					<tr>
+					<th class="nextline"><a href="/web/adminnotice/adminview?idx=<%=nextidx%>&totalcount=<%=nexttotalcount%>">다음글</a></th>
+					<td class="nextlinetd"><%=nexttitle%></td>
+					</tr>
+				</c:when>
+				<c:when test="${nexttitle == null}">
+					<tr>
+					<th class="nextline"><a disabled>다음글이 없습니다</a></th>
+					<td class="nextlinetd"></td>
+					</tr>
+				</c:when>
+			</c:choose>
+			<c:choose>
+				<c:when test="${lasttitle != null}">
+					<tr>
+					<th class="nextline"><a href="/web/adminnotice/adminview?idx=<%=lastidx%>&totalcount=<%=lasttotalcount%>">이전글</a></th>
+					<td class="nextlinetd"><%=lasttitle%></td>
+					</tr>
+				</c:when>
+				
+
+				<c:when test="${lasttitle == null}">
+					<tr>
+					<th class="nextline"><a>이전글이 없습니다</a></th>
+					<td class="nextlinetd"></td>
+					</tr>
+				</c:when>
+			</c:choose>
+
+		</table>
+</div>
+</div>
+</div>
+
+		
+		<div class="writebtn" style="padding-top: 10px; ">
+			<ul>
+				<li style="padding: 5px 25px"><a href="../adminnotice/adminlist">목록</a></li>
+			</ul>
+		</div>
+
+
+		
+
+		<!-- 댓글 -->
+
+		<div class="replylist" id="reply_card${one.idx }">
+			<section class="modal-section">
+			
+					<!-- 댓글 작성 => 로그인한 상태여야만 댓글 작성 칸이 나온다. -->
+					<c:if test="${not empty sessionScope.nickname}">
+						<div class="reply_write">
+
+							<div class="input_reply_div">
+								<!-- input_reply  -->
+							<span class="nickname" >${nickname}&nbsp;&nbsp;</span>
+							<input class="form-control" id="input_reply${one.idx }" type="text" placeholder="댓글 추가..."  oninput="writecheck()">
+							</div>
+
+							<div class="form-control-btn">
+								<button type="button" class="cancelbtn" onclick="cancelComment()" >취소</button>
+								<button type="button" title ="${one.title}" fromid="${nickname}" toid="${one.nickname}" idx="${one.idx}" class="write_reply" >댓글&nbsp;달기</button>
+							</div>
+
+						</div>
+					</c:if>
+					
+				
+				
+				<div class="card-body">
+				
+						<div class="reply-list${one.idx }">
+						<!-- 댓글이 들어가는 곳 -->
+						
+						
+						</div>
+				
 				</div>
-					<div class="col-1">
+
+			</section>
+		</div>
 
 
-					</div>
-				<!-- 댓글 작성 => 로그인한 상태여야만 댓글 작성 칸이 나온다. -->
-				<!-- <c:if test="$not empty sessionScope.nickname}">                </c:if>-->
-				<c:if test="${not empty sessionScope.nickname}">
-				<div class="row reply_write">
-					<div class="col-8 input_reply_div">
-					                                            <!-- input_reply  -->
-						<input class="w-100 form-control" id="input_reply${one.idx }" type="text"                 
-							placeholder="댓글입력...">
 
-					</div>
-					<div class="col-3">
-						<button type="button" idx="${one.idx}" class="write_reply">댓글&nbsp;달기</button>
-					</div>
-				</div>
-				</c:if>
-			</div>
-		</section>
-	</div>
+	</main>
+</body>
 
-	<script>
+<script>
 //댓글
 // 게시물의 댓글 목록을 불러오는 함수
 const ReplyList = function(idx) {
+	
+	var number = 0;
+	
+	
+	
 	 $.ajax({
 		 url : 'picture_replyList',
 	 	type : 'get',
@@ -162,7 +188,7 @@ const ReplyList = function(idx) {
 	 			let next_grps = data[i].next_grps;
 	 			
 	 			
-	 		listHtml += "<div class='row replyrow reply" + idx + "'>";
+	 		listHtml += "<div class='replyrow replystart" + idx + "'>";
 				
 				if (content == "") { // 삭제된 댓글일 때
  				   listHtml += "       <div>";
@@ -172,23 +198,29 @@ const ReplyList = function(idx) {
 				} else {
 				    if (grpl == 0) { // 모댓글일 때
 				     
-				        listHtml += ' <div class="rereply-content col-8">';
+				        listHtml += ' <div class="rereply-content'+ number + ' rereply-content left" >';
 				        listHtml += ' <div>';
 				        listHtml += ' <span>';
 				        listHtml += ' <b>' + writer + '</b>';
 				        listHtml += ' </span>';
+				        listHtml += ' </div>';
+				        listHtml += ' <div>';
 				        listHtml += ' <span>';
 				        listHtml += content;
 				        listHtml += ' </span>';
 				        listHtml += ' </div>';
 	 					//현재 로그인 상태일때 답글작성 버튼이 나온다
+	 				listHtml += "<div class='buttoncontroll'>"
 	 					if ("${nickname}" !== "") {
+	 						<!--if("${nickname}" != writer){-->
+	 							
 	 						
 	 			listHtml += "            <div>";
-				listHtml += "                    <a href='javascript:' idx='" + idx +"' grpl='" + grpl +"' bidx='" + bidx + "' grp='" + grp +"' class='rerewritebutton'>답글쓰기</a>";
+				listHtml += "                    <a href='javascript:' idx='" + idx +"' grpl='" + grpl +"' bidx='" + bidx + "' grp='" + grp +"' class='rerewritebutton'>답글</a>";
 				listHtml += "            </div>";
 
     					
+	 						
 	 				          	}
 	 				
 	 					
@@ -200,19 +232,26 @@ const ReplyList = function(idx) {
     						 listHtml += "            </div>";
 	 					}
 	 				}
+    						 listHtml += "            </div>";
 	 					
 	 					
-	 					
-					listHtml += "            <div>";
-					listHtml += "                    <a href='javascript:' idx='" + idx +"' grpl='" + grpl +"' bidx='" + bidx + "' grp='" + grp +"' class='showrereply'>답글" + next_grps + "개 더 보기</a>";
-					listHtml += "            </div>";
+	 					if(next_grps != 0){
+	 						listHtml += "<a  id='svgicon" + idx + "'style='color : #065fd4' href='javascript:' idx='" + idx + "' grpl='" + grpl + "' bidx='" + bidx + "' grp='" + grp + "' class='showrereply'>";
+	 						listHtml += "  <div class='viewbtn'>";
+	 						listHtml += "    <svg name='downview' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' style='fill: #065fd4' class='bi bi-caret-down-fill' viewBox='0 0 16 16'>";
+	 						listHtml += "      <path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/>";
+	 						listHtml += "    </svg>";
+	 						listHtml += "    답글" + next_grps + "개";
+	 						listHtml += "  </div>";
+	 						listHtml += "</a>";
+	 					}
 
+	 					listHtml +="<div class='rerewritebutton"+ idx + "'>"
+	 					
+	 					listHtml += "</div>"
 						<!-- 댓댓글이 들어가는 곳 -->
 	 					listHtml += "<div class='rereply-list"+ idx + "'>"
 		 					
-	 					
-	 					listHtml += "</div>"
-	 					listHtml +="<div class='rerewritebutton"+ idx + "'>"
 	 					
 	 					listHtml += "</div>"
 	 			        	}
@@ -221,8 +260,7 @@ const ReplyList = function(idx) {
 				 // 댓글에 답글달기를 누르면 답글입력란이 나온다.
 				 // ------답글입력란
 				 
-					 
-				
+				number++;
 				 
 	 				// 답글입력란 끝
 	 				
@@ -240,20 +278,52 @@ const ReplyList = function(idx) {
 	 		});
 
 	 		$('.showrereply').on('click', function() {
+	 			 var idx= $(this).attr('idx');
+	 			 var svgname = $(this).find("svg").attr("name");
+	 		    
+	 			if(svgname==="downview"){
+	 				
+	 		    	 var newSVG = '<svg name="upview" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">';
+	 		         newSVG += '<path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>';
+	 		         newSVG += '</svg>';
+	 		     	$('#svgicon' + idx + ' svg').replaceWith(newSVG); 
 	 		    // 답글을 DB에 저장하는 함수를 호출한다. bidx와 idx를 같이 넘겨준다.
 	 		    showrereply($(this).attr('bidx'), $(this).attr('idx'),$(this).attr('grp'),$(this).attr('grpl'));
+	 		     	
+	 			}else if(svgname==="upview"){
+	 				var newSvgs = '<svg  name="downview" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>';
+	 				$('#svgicon' + idx + ' svg').replaceWith(newSvgs);
+	 				
+	 				$(".rereply-list"+idx).html('');
+	 				return;
+	 				
+	 			}
+	 			
+	 			
 	 		});
 	 		
 	 		$('.rerewritebutton').on('click', function() {
-	 		    // 답글을 DB에 저장하는 함수를 호출한다. bidx와 idx를 같이 넘겨준다.
+	 		
 	 		    rerewritebutton($(this).attr('bidx'), $(this).attr('idx'),$(this).attr('grp'),$(this).attr('grpl'));
-	 		});
+	 		   
+	 		 
+	 		    
+	 		  });
 	 		
 	 		$('.reply_delete').on('click', function() {
 	 		    // 모댓글 삭제일 때
 	 		    if ($(this).attr('grpl') == 0) {
 	 		        DeleteReply($(this).attr('idx'), $(this).attr('bidx'));
 	 		    } 
+	 		    
+	 		    
+	 		    
+	 		    
+	 		    
+	 		    
+	 		    
+	 		    
+	 		    
 	 })
 	 
 	 
@@ -274,14 +344,20 @@ const ReplyList = function(idx) {
 
 
 //대댓글 입력
-const WriteReReply = function(bidx,idx) {
+const WriteReReply = function(bidx,idx,content,grpl) {
 	
+		
+	
+	var grpls = grpl;
 	
 	
 	// 댓글 입력란의 내용을 가져온다.
 	// "" 를 붙인 이유 => 앞뒤 공백을 제거한다.(띄어쓰기만 입력했을때 댓글작성안되게 처리하기 위함)
 	
-	let content = $("#input_rereply"+idx).val();
+	if(content==""){
+		
+	content = $("#input_rereply"+idx).val();
+	}
 //	content = content.trim();
 	
 	
@@ -299,7 +375,8 @@ const WriteReReply = function(bidx,idx) {
 				
 				idx : idx,
 				bidx : bidx,
-				content : content
+				content : content,
+				grpls : grpls
 			},
 			success : function(pto){
 				//let reply = pto.reply;
@@ -313,7 +390,6 @@ const WriteReReply = function(bidx,idx) {
 				var grp = pto.grp;
 				var grpl = pto.grpl;
 				
-				console.log(pto);
 				ReplyList(bidx);
 				showrereply(bidx,idx,grp,grpl);
 			
@@ -336,13 +412,43 @@ const WriteReReply = function(bidx,idx) {
 
 
 
+
+ // 취소 버튼 클릭 시 호출되는 함수
+    function cancelComment() {
+      // 입력 상자를 초기화
+      document.querySelector('.form-control').value = '';
+
+      // 버튼 숨기기
+      document.querySelector('.form-control-btn').style.display = 'none';
+    }
+ 
+ //글이 채워지면 적을 수 있게 해줌
+ 
+ 	function writecheck() {
+	 
+ 		if($(".form-control").val() != ""){
+ 			
+ 			$('.write_reply').css('backgroundColor', '#3367d6');
+ 			$('.write_reply').css('color', '#fff');
+ 		    
+ 		}else{
+ 		
+ 			$('.write_reply').css('backgroundColor', '#0000000D');
+ 			$('.write_reply').css('color', '#909090');
+ 		     }
+	 
+ }
+ 
+ 
+
 //모댓글 작성
-const writeReply = function(bidx,idx) {
+
+
+const writeReply = function(bidx,idx,toid,fromid,title) {
 	
 	
 	// 댓글 입력란의 내용을 가져온다.
 	// "" 를 붙인 이유 => 앞뒤 공백을 제거한다.(띄어쓰기만 입력했을때 댓글작성안되게 처리하기 위함)
-	
 	let content = $("#input_reply" + idx).val();
 	
 	
@@ -359,6 +465,10 @@ const writeReply = function(bidx,idx) {
 			data : {
 				
 				idx : idx,
+				toid,
+				fromid,
+				title,
+				
 				content : content
 			},
 			success : function(pto){
@@ -420,9 +530,30 @@ const DeleteReply = function(bidx,idx) {
 
 
 
+	const changespan = function(contentDiv) {
+		
+	
+	    // Get the content from the div
+	    var content = contentDiv.innerText;
 
+	    
+	    // Use regular expression to find @mentions
+	    var mentionRegex = /@(\S+)/g;
+	    var mentions = content.match(mentionRegex);
 
+	    
+	    // Wrap @mentions with span elements
+	    if (mentions) {
+	        mentions.forEach(function (mention) {
+	            const spanElement = document.createElement('span');
+	            spanElement.className = 'mention'; // Add a class for styling
+	            spanElement.innerText = mention;
+	            contentDiv.innerHTML = contentDiv.innerHTML.replace(mention, spanElement.outerHTML);
+	        });
+	    }
+	};
 
+	
 
 
 
@@ -439,6 +570,9 @@ const showrereply = function(bidx,idx,grp,grpl) {
 	
 	
 	
+	const grol = +grpl;
+	grpl = grol + 1;
+	
 	$.ajax({
 		url : 'showrereply',
 		type : 'get',
@@ -450,11 +584,13 @@ const showrereply = function(bidx,idx,grp,grpl) {
 			
 		},
 		success : function(data){
-		
+		var number = 0;
 			let listHtml = "";
 			for(const i in data){
+				
 	 			let idx = data[i].idx;
 	 			let bidx = data[i].bidx;
+	 			let bbidx = data[i].bbidx;
 	 			let grp = data[i].grp;
 	 			let grps = data[i].grps;
 	 			let grpl = data[i].grpl;
@@ -463,26 +599,60 @@ const showrereply = function(bidx,idx,grp,grpl) {
 	 			let regdate = data[i].regdate;
 	 			let wgap = data[i].wgap;
 			
-			
-	 				listHtml += ' <div>';
-			        listHtml += ' <span>';
-			        listHtml += ' <b>' + writer + '</b>';
-			        listHtml += ' </span>';
-			        listHtml += ' <span>';
-			        listHtml += content;
-			        listHtml += ' </span>';
-			        listHtml += ' </div>';
+	 			
+	 			
+				listHtml += '<div class="rerereplyall">';
+	 			listHtml += ' <div class="  rerereply-content left">';
+		        listHtml += ' <div class="rerereply-content'+ number + '">';
+		        listHtml += ' <span>';
+		        listHtml += ' <b>' + writer + '</b>';
+		        listHtml += ' </span>';
+		        listHtml += ' </div>';
+		        listHtml += ' <div id="content"style="padding-top: 7px; padding-bottom: 7px;">';
+		        listHtml += ' <span  style="padding-left: 10px;" class="rerereply-content-span">';
+		        listHtml += content;
+		        listHtml += ' </span>';
+		        listHtml += ' </div>';
+	 			
+		        <!-- 세로 정렬 다시 해보기 -->
+		        listHtml += '<div class="buttoncontroll">';
+		        if ("${nickname}" !== "") {
+							
+						
+			listHtml += "            <div>";
+			listHtml += "                    <a href='javascript:' bbidx='" + bbidx + "' idx='" + idx +"' grpl='" + grpl +"' bidx='" + bidx + "' grp='" + grp +"' class='rererewritebutton'>답글</a>";
+			listHtml += "            </div>";
+						
+				          	}
+		        
+		        
+		        
+		        
 			        if("${nickname}" == writer){
  						
 							 listHtml += "            <div>";
 							 listHtml += "                    <a href='javascript:' idx='" + idx +"' grpl='" + grpl +"' bidx='" + bidx + "' grp='" + grp +"' class='rereply_delete'>삭제</a>";
 						 listHtml += "            </div>";
 					}
-					listHtml += '<div>';
-					listHtml += '1번2번';
+			        
+ 					listHtml += "</div>";
+					
+			        
+ 					
+ 					
+			        listHtml +="<div class='rererewritebutton"+ idx + "'>";
+ 					
+ 					listHtml += "</div>";
+			        
+			        
+			        listHtml += '</div>';
 					listHtml += '</div>';
 			
-			
+					
+					
+					
+					
+				number++;
 			}
 			
 			
@@ -491,9 +661,36 @@ const showrereply = function(bidx,idx,grp,grpl) {
 			
 			$('.rereply_delete').on('click', function() {
 	 		    // 답글을 DB에 저장하는 함수를 호출한다. bidx와 idx를 같이 넘겨준다.
-	 		    rereply_delete($(this).attr('idx'),$(this).attr('bidx'));
+	 		    rereply_delete($(this).attr('idx'),$(this).attr('bidx'),$(this).attr('grpl'));
 				
 	 		});
+			
+			$('.rererewritebutton').on('click', function() {
+	 		    //  대댓글에 댓글을 달때
+				 rererewritebutton($(this).attr('bidx'), $(this).attr('idx'),$(this).attr('grp'),$(this).attr('grpl'),$(this).attr('bbidx'));
+				
+	 		    
+							});
+			
+			
+		
+			// showrereply 함수 내에서 contentDiv에 대해 changespan 함수 호출
+			var contentDivs = document.querySelectorAll('.rerereply-content-span');
+			contentDivs.forEach(function (contentDiv) {
+				changespan(contentDiv);
+			});
+			
+			
+			
+			    
+			    
+			    
+			    
+			    
+			    
+			
+			
+			
 			
 			
 			
@@ -505,16 +702,18 @@ const showrereply = function(bidx,idx,grp,grpl) {
 };
 
 //대댓글 삭제
-const rereply_delete = function(idx, bidx) {
+const rereply_delete = function(idx, bidx,grpl) {
 
 	
+	var grpls = grpl;
 		$.ajax({
 			url : 'rereply_delete',
 			type : 'get',
 			data : {
 				
 				idx : idx,
-				bidx : bidx
+				bidx : bidx,
+				grpls : grpls
 			
 			},
 			success : function(result){
@@ -541,9 +740,49 @@ const rereply_delete = function(idx, bidx) {
 		});
 	};
 
+	
+
+
+	
+	
+	
+	// 취소 버튼 클릭 시 호출되는 함수
+    function cancelreComment(idx) {
+      // 입력 상자를 초기화
+      document.querySelector('.reform-control').value = '';
+
+      // 버튼 숨기기
+      document.querySelector('.reform-control-btn').style.display = 'none';
+      $(".rerewritebutton"+idx).html('');
+      
+    }
+ 
+ //글이 채워지면 적을 수 있게 해줌
+ 
+ 	function rewritecheck() {
+	 
+ 		if($(".reform-control").val() != ""){
+ 			
+ 			$('.write_rereply').css('backgroundColor', '#3367d6');
+ 			$('.write_rereply').css('color', '#fff');
+ 		    
+ 		}else{
+ 		
+ 			$('.write_rereply').css('backgroundColor', '#0000000D');
+ 			$('.write_rereply').css('color', '#909090');
+ 		     }
+	 
+ }
+	
+	
+	
+	
+	
+	
 const rerewritebutton = function(bidx,idx,grp,grpl) {
 	
-	
+	const grol = +grpl;
+	grpl = grol + 1;
 	$.ajax({
 		url : 'rerewritebutton',
 		type : 'get',
@@ -562,6 +801,7 @@ const rerewritebutton = function(bidx,idx,grp,grpl) {
 	 			var bidx = data.bidx;
 	 			var grp = data.grp;
 	 			var grpl = data.grpl;
+	 			var writer = data.writer;
 			
 	 			 // 댓글에 답글달기를 누르면 답글입력란이 나온다.
 				 // ------답글입력란
@@ -569,14 +809,24 @@ const rerewritebutton = function(bidx,idx,grp,grpl) {
 					 
 				
 				 
-	 			 listHtml += " <div class='collapse row rereply_write' id='re_reply" + idx + "'>";
-				 listHtml += " <div class='col-7'>";
-				 listHtml += "   <input class='w-100 input_rereply_div form-control' id='input_rereply" + idx + "' type='text' placeholder='댓글입력...'>";
+	 			 listHtml += " <div class='rereply_write' id='re_reply" + idx + "'>";
+	 			 
+				 listHtml += " <div class='input_rereply_div'>";
+				 listHtml += "   <input class='reform-control' id='input_rereply" + idx + "' oninput='rewritecheck()' type='text' placeholder='댓글입력...'>";
 				 listHtml += " </div>";
-				 listHtml += "  <div class='col-3'>";
-				 listHtml += "<button type='button' class='write_rereply' idx='" + idx + "' bidx='" + bidx + "'>답글&nbsp;달기</button>";
+				 
+				 listHtml += "  <div class='reform-control-btn'>";
+				 
+				 listHtml += "<div>"
+				 listHtml += "<button type='button' class='cancelrebtn' onclick='cancelreComment("+idx+")' >취소</button>"
+				 listHtml += "</div>"
+				 
+				 listHtml += "<div>"
+				 listHtml += "<button type='button' class='write_rereply' grpl='" +grpl+ "' idx='" + idx + "' bidx='" + bidx + "'>답글&nbsp;달기</button>";
+				 listHtml += "</div>"
+				 
+				 listHtml += " </div>";
 
-				 listHtml += " </div>";
 				 listHtml += "</div>";
 	 				// 답글입력란 끝
 			
@@ -590,11 +840,22 @@ const rerewritebutton = function(bidx,idx,grp,grpl) {
 	 				
 	 				
 			// 답글을 작성한 후 답글달기 버튼을 눌렀을 때 그 click event를 아래처럼 jQuery로 처리한다.
-	 		$('.write_rereply').on('click', function() {
+	 		$('.write_rereply').on('click', async function() {
 	 		    // 답글을 DB에 저장하는 함수를 호출한다. bidx와 idx를 같이 넘겨준다.
-	 		    WriteReReply($(this).attr('bidx'), $(this).attr('idx'));
-				
+	 		    var content = "";
+	 		   await WriteReReply($(this).attr('bidx'), $(this).attr('idx'), content, $(this).attr('grpl'))
+	 	          
+
+	 		  
+	 		  
+	 		
 	 		});
+	 		 function showreCommentButtons() {
+	 		      // 버튼 보이기
+	 		      document.querySelector('.reform-control-btn').style.display = 'flex';
+	 		    }
+	 		    // 댓글 입력 상자에 이벤트 리스너 등록
+	 		    document.querySelector('.reform-control').addEventListener('focus', showreCommentButtons);
 			
 		},
 		error : function() {
@@ -609,33 +870,209 @@ const rerewritebutton = function(bidx,idx,grp,grpl) {
 
 
 
-//모댓글 삭제일때
+
+// 취소 버튼 클릭 시 호출되는 함수
+function cancelrereComment(idx) {
+  // 입력 상자를 초기화
+  document.querySelector('.rereform-control').value = '';
+
+  // 버튼 숨기기
+  document.querySelector('.rereform-control-btn').style.display = 'none';
+  $(".rererewritebutton"+idx).html('');
+  
+}
+
+//글이 채워지면 적을 수 있게 해줌
+
+	function rerewritecheck() {
+ 
+		if($(".rereform-control").val() != ""){
+			
+			$('.write_rerereply').css('backgroundColor', '#3367d6');
+			$('.write_rerereply').css('color', '#fff');
+		    
+		}else{
+		
+			$('.write_rerereply').css('backgroundColor', '#0000000D');
+			$('.write_rerereply').css('color', '#909090');
+		     }
+ 
+}
+
+const rererewritebutton = function(bidx,idx,grp,grpl,bbidx) {
+	
+
+	const grol = +grpl;
+	grpl = grol + 1;
+
+	
+	
+	$.ajax({
+		url : 'rererewritebutton',
+		type : 'get',
+		data : {
+			
+			grp : grp,
+			grpl : grpl,
+			idx : idx,
+			bidx: bidx,
+			bbidx : bbidx
+			
+		},
+		success : function(data){
+			let listHtml = "";
+		
+	 			var idx = data.bbidx;
+	 			var realidx = data.idx;
+	 			var bidx = data.bidx;
+	 			var grp = data.grp;
+	 			var grpl = data.grpl;
+	 			var toname = data.writer;
+			
+	 			 // 댓글에 답글달기를 누르면 답글입력란이 나온다.
+				 // ------답글입력란
+				 
+					 
+				
+				 
+	 			 listHtml += " <div class='rerereply_write' id='re_re_reply" + idx + "'>";
+	 			 
+				 listHtml += " <div class='input_rerereply_div'>";
+				 
+				 listHtml += "<span id='tonameSpan'> @"+toname+"</span> <textarea oninput='rerewritecheck()'class='rereform-control'  id='userInput'></textarea>";
+				 listHtml += " </div>";
+				 
+				 listHtml += "  <div class='rereform-control-btn'>";
+				 
+				 listHtml += "<div>"
+				 listHtml += "<button type='button' class='cancelrerebtn' onclick='cancelrereComment("+idx+")' >취소</button>"
+				 listHtml += "</div>"
+				 
+				 listHtml += "<div>"
+				 listHtml += "<button type='button' class='write_rerereply' grpl='" + grpl + "' idx='" + idx + "' bidx='" + bidx + "'>답글&nbsp;달기</button>";
+				 listHtml += "</div>"	
+				 
+				 
+				
+				 
+				 
+				 listHtml += " </div>";
+
+				 listHtml += "</div>";
+	 				// 답글입력란 끝
+			
+			
+			
+			
+			
+			
+			$(".rererewritebutton"+realidx).html(listHtml);
+	 				
+	 				
+	 				
+			// 답글을 작성한 후 답글달기 버튼을 눌렀을 때 그 click event를 아래처럼 jQuery로 처리한다.
+	 		$('.write_rerereply').on('click', function() {
+	 			
+	 			var toname = document.getElementById('tonameSpan').innerText;
+	 			  var userInput = document.getElementById('userInput').value;
+	 				 var content = toname + ' ' + userInput;
+	 			  
+	 			   WriteReReply($(this).attr('bidx'), $(this).attr('idx'),content,$(this).attr('grpl'));
+	 		 
+	 		
+	 		});
+	 		
+					
+	 		 function showrereCommentButtons() {
+	 		      // 버튼 보이기
+	 		      document.querySelector('.rereform-control-btn').style.display = 'flex';
+	 		    }
+	 		    // 댓글 입력 상자에 이벤트 리스너 등록
+	 		    document.querySelector('.rereform-control').addEventListener('focus', showrereCommentButtons);
+					
+	 		
+	 		
+	 		
+		},
+		error : function() {
+			alert('서버 에러');
+		}
+	});
+};
 
 
 
 
-// 답글 삭제일때
 
 
+
+
+
+
+
+
+
+//알람에 넣기
+
+
+		
+
+	
+		
+
+
+
+			
+			
+			
+			
 
 
 
 $(function(){ // onload
 		
-	
-		
 	$('.write_reply').on('click', function() {
 	    // 답글을 DB에 저장하는 함수를 호출한다. bidx와 idx를 같이 넘겨준다.
-	    writeReply($(this).attr('bidx'), $(this).attr('idx'));
+	    writeReply($(this).attr('bidx'), $(this).attr('idx'),$(this).attr('title'),$(this).attr('toid'),$(this).attr('fromid'));
+
+	  
 	});
+	
+	
+	
+	
+
+	
+	
+	
+		ReplyList(${one.idx });
+	
+
+
+		
+
 		
 		
 		
+
+	
+	 // 댓글 입력 상자를 클릭할 때 호출되는 함수
+    function showCommentButtons() {
+      // 버튼 보이기
+      document.querySelector('.form-control-btn').style.display = 'block';
+    }
+    // 댓글 입력 상자에 이벤트 리스너 등록
+    document.querySelector('.form-control').addEventListener('focus', showCommentButtons);
+
+   
 		});		
 
-
-
-
+   
+			
+   
+    
+   
+	
 
 </script>
 
@@ -646,5 +1083,4 @@ $(function(){ // onload
 
 
 
-</body>
 </html>

@@ -30,6 +30,38 @@ public class QnaServiceImpl implements QnaService{
 	}
 
 	
+	
+	
+	@Override
+	public
+	int getQnacount(String search)  throws Exception{
+		return dao.getQnacount(search);
+	} 
+	
+	
+	
+	@Override
+	public
+	int getinfoQnacount(String nickname)  throws Exception{
+		return dao.getinfoQnacount(nickname);
+	} 
+	
+	
+	
+	@Override
+	public
+	List<QnaDTO> getMemberPaging(Map<String, Object> pstr) {
+		return dao.getMemberPaging(pstr);
+	}
+	
+	@Override
+	public
+	List<QnaDTO> getinformationqnalist(Map<String, Object> pstr) {
+		return dao.getinformationqnalist(pstr);
+	}
+	
+
+	
 	@Override
 	public void insertFile(QnaDTO dto) {
 		dao.insertFile(dto);
@@ -74,5 +106,6 @@ public class QnaServiceImpl implements QnaService{
 	public void rootupdate() {
 		dao.rootupdate();
 	}
+	
 	
 }

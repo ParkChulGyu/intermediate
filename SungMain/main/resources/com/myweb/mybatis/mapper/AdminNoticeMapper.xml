@@ -82,15 +82,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 <insert id="insertFile" parameterType="com.myweb.dto.AdminNoticeDTO">
    <![CDATA[
-    INSERT INTO admin (title, content, nickname, category, ofile, sfile)
-    VALUES (#{title}, #{content}, #{nickname}, #{category}, #{ofile}, #{sfile})
+    INSERT INTO admin (title, content, nickname , ofile, sfile)
+    VALUES (#{title}, #{content}, #{nickname}, #{ofile}, #{sfile})
      ]]>
 </insert>
 	
-	<update id="updatecount" parameterType="com.myweb.dto.AdminNoticeDTO">
+	<update id="updatecount" parameterType="int">
     <![CDATA[
     UPDATE admin
-    SET totalcount = #{totalcount}
+    SET totalcount = totalcount +1
     WHERE idx = #{idx}
     ]]>
 </update>
@@ -119,12 +119,13 @@ ORDER BY r.grp, r.grps;
 
 <select id="showrereply" parameterType="com.myweb.dto.ReplyDTO"
 		resultType="com.myweb.dto.ReplyDTO">
-		 <![CDATA[
-		select r.idx, r.bidx, r.grp,r.grps, r.grpl, r.writer, r.content, date_format(regdate,'%Y-%m-%d') regdate, datediff(now(), regdate) wgap
+		
+	  <![CDATA[
+  select r.idx, r.bidx, r.grp,r.grps, r.grpl, r.writer, r.content, date_format(regdate,'%Y-%m-%d') regdate, datediff(now(), regdate) wgap
 		from p_reply r 
-		where r.grp = #{grp}  And  r.grpl = #{grpl}
+		where r.grp = #{grp}  And  r.grpl >= 1
 		order by grp asc, grps asc
-		 ]]>
+		]]>
 	</select>
 
 <select id="replyanswerList" parameterType="com.myweb.dto.ReplyDTO"
@@ -180,6 +181,13 @@ ORDER BY r.grp, r.grps;
 		 ]]>
 	</select>
 	
+<select id="getonemember" 
+		resultType="com.myweb.dto.ReplyDTO">
+		 <![CDATA[
+		SELECT *   FROM p_reply where idx = #{idx};
+		 ]]>
+	</select>
+	
 	<update id="pictureWriteReplyupdate" parameterType="com.myweb.dto.ReplyDTO">
     <![CDATA[
     UPDATE p_reply
@@ -200,11 +208,140 @@ ORDER BY r.grp, r.grps;
     <![CDATA[
     UPDATE p_reply
     SET grps = #{grps}
-    WHERE grp = #{grp} AND grps = #{grps } -1  And grpl = 1
+    WHERE grp = #{grp} AND grps = #{grps } -1  And grpl >=1
     ]]>
 </update>
 
+	<update id="pictureWriteReplydeleteGrpas" parameterType="com.myweb.dto.ReplyDTO">
+    <![CDATA[
+    UPDATE p_reply
+    SET grps = #{grps}
+    WHERE grp = #{grp} AND grps = #{grps } +1  And grpl >=1
+    ]]>
+</update>
+
+<select id="getinfoadmincount" 
+		resultType="int">
+		 <![CDATA[
+		SELECT count(*) FROM admin  where nickname = #{nickname};
+		 ]]>
+	</select>
+	
+	
+<select id="getinformywritecount"  parameterType="Map"
+		resultType="int">
+		 <![CDATA[
+	SELECT SUM(total) AS grand_total
+FROM (
+    SELECT COUNT(*) AS total, '자유게시판' AS category
+    FROM admin
+    WHERE nickname = #{nickname}
+    GROUP BY category
+
+    UNION
+
+    SELECT COUNT(*) AS total, 'Qna' AS category
+    FROM qna
+    WHERE writer = #{nickname}
+    GROUP BY category
+) AS subquery
+WHERE 1=1
+AND (category LIKE CONCAT('%',#{search},'%'));
+		
+		 ]]>
+	</select>
+	
+
+<select id="getinforeplycount" resultType="int">
+    <![CDATA[
+    SELECT COUNT(*) FROM p_reply
+    WHERE writer = #{nickname} 
+    ]]>
+</select>
+
+<select id="matchgrp" resultType="String">
+    <![CDATA[
+    SELECT idx FROM p_reply
+    WHERE bidx = #{bidx} limit 1 
+    ]]>
+</select>
 
 
+	
+		<select id="getinformationadminPaging"
+		parameterType="Map"
+		resultType="com.myweb.dto.AdminNoticeDTO">
+        <![CDATA[
+        select idx, title, content, nickname, regdate,category,regdate, totalcount
+        from admin where nickname = #{nickname}
+        order by regdate desc limit #{listNum} offset #{start_rownum}
+        ]]>
+	</select>
+
+
+
+		<select id="getinformationareplyPaging"
+    parameterType="Map"
+    resultType="com.myweb.dto.ReplyDTO">
+    <![CDATA[
+  select idx,bidx,grpl,grp,grps,writer,content, date_format(regdate,'%Y-%m-%d') regdate
+        from p_reply where writer = #{nickname}
+        order by regdate desc limit #{listNum} offset #{start_rownum}
+    ]]>
+</select>
+
+		<select id="getname"
+    parameterType="String"
+    resultType="String">
+    <![CDATA[
+  select writer
+        from p_reply where idx = #{idx}
+    ]]>
+</select>
+
+
+
+
+
+
+
+
+
+		<select id="getinfomywritelistPaging"
+    parameterType="Map"
+    resultType="com.myweb.dto.MywritelistDTO">
+    <![CDATA[
+   
+   SELECT * FROM (
+	select * from (
+    SELECT idx, title,  date_format(regdate,'%Y-%m-%d') regdate, readcnt as totalcount, 'Qna' as category
+    FROM qna
+    WHERE writer =  #{nickname}
+  ) as admin1
+
+UNION
+    
+    select * from(
+    SELECT idx, title,  date_format(regdate,'%Y-%m-%d') regdate, totalcount, '자유게시판' as category
+    FROM admin
+    WHERE nickname = #{nickname}
+   
+  ) as Qna1
+) AS combined_result 
+WHERE (category LIKE CONCAT('%',#{search},'%'))  order by 	${selectdatesql} LIMIT #{listNum} OFFSET #{start_rownum}
+   
+   
+   
+   
+        
+        
+    ]]>
+</select>
+  
+
+
+
+
+ 		
 
 </mapper>

@@ -7,8 +7,7 @@ pdto<%@page import="java.text.SimpleDateFormat"%>
 
 <%
 	request.setCharacterEncoding("utf-8");
-	
-	List<MemberDTO> list = (List<MemberDTO>)request.getAttribute("list");
+		List<MemberDTO> list = (List<MemberDTO>)request.getAttribute("list");
 %>
 		
 
@@ -17,6 +16,7 @@ pdto<%@page import="java.text.SimpleDateFormat"%>
 <head>
 <meta charset="UTF-8">
 <title>memberList.jsp</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/top2.css">
 </head>
 <body>
 <%@include file="submenu.jsp" %>

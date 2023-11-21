@@ -6,6 +6,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
      
 
+     
+
 	<%
 	String nickname = (String) session.getAttribute("nickname"); 
 	
@@ -18,33 +20,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 <title>New.jsp</title>
-</head>
-<body>
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/css/top2.css">
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/common.css?v=<%=new java.util.Date().getTime() %>">
+<meta charset="UTF-8">
 <%@include file="../topmenu.jsp" %>
-<table>
+</head>
+
+
+
+<body>
+<main>
+
+<div class="detailjsp">
+
+
+<div class="maintitle">
+
+		<h2>Q&A</h2>
+</div>
+
+
+
+
+
+
+<table class="DetailList">
 
 	<tr>
-		<th class="w-px160">제목</th>
-		<td colspan="5" class="left">${dto.title }</td>
+		<th class="w-px160 detailline">제목</th>
+		<td colspan="5" class="left detaillinetd ">${dto.title }</td>
 	</tr>
 	<tr>
-		<th>작성자</th>
-		<td>${dto.writer }</td>
-		<th class="w-px120">작성일자</th>
-		<td class="w-px120">${dto.regdate }</td>
-		<th class="w-px80">조회수</th>
-		<td class="w-px80">${dto.readcnt }</td>
+		<th class="detailline">작성자</th>
+		<td class="detaillinetd">${dto.writer }</td>
+		<th class="w-px120 detailline">작성일자</th>
+		<td class="w-px120 detaillinetd ">${dto.regdate }</td>
+		<th class="w-px80 detailline">조회수</th>
+		<td class="w-px80  detaillinetd">${dto.readcnt }</td>
 	</tr>
 	<tr>
-		<th>내용</th>
-		<td colspan="5" class="left">${fn:replace(dto.content, crlf, '<br>') }</td>
+		<th style="height: 90px; " class="detailline">내용</th>
+		<td colspan="5" class="left detailtd">${fn:replace(dto.content, crlf, '<br>') }</td>
 	</tr>
 	<tr>
 	
-		<th>첨부 파일</th>
-		<td colspan="5" class="left">
+		<th class="detailline">첨부 파일</th>
+		<td colspan="5" class="left detaillinetd ">
 			
 			
 			<c:if test="${not empty dto.filename }">
@@ -58,7 +82,16 @@
 	</tr>
 </table>
 
-<div class="btnSet">
+
+
+
+
+
+
+
+
+
+<div class="detailbtnSet">
 	<a class="btn-fill" href="Qna">목록으로</a>
 		<c:if test="${nickname eq dto.writer}">
     <a class="btn-fill" href="modify?idx=${dto.idx}">수정</a>
@@ -73,11 +106,11 @@
 
 
 	
+</div>
 
 
 
 
-
-
+</main>
 </body>
 </html>

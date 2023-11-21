@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.myweb.dto.AdminNoticeDTO;
 import com.myweb.dto.MoveDTO;
+import com.myweb.dto.MywritelistDTO;
+import com.myweb.dto.QnaDTO;
 import com.myweb.dto.ReplyDTO;
 import com.myweb.mybatis.mapper.AdminNoticeMapper;
 import com.myweb.service.AdminNoticeService;
@@ -55,8 +57,8 @@ public class AdminNoticeServiceImpl implements AdminNoticeService{
 	} 
 	@Override
 	public
-	int  updatecount(AdminNoticeDTO dto) throws Exception {
-		return admin.updatecount(dto);
+	int  updatecount(int idx) throws Exception {
+		return admin.updatecount(idx);
 	}
 	
 	@Override
@@ -68,6 +70,7 @@ public class AdminNoticeServiceImpl implements AdminNoticeService{
 	public
 	ArrayList<ReplyDTO> showrereply(ReplyDTO dto) {
 		return admin.showrereply(dto);
+		
 	} 
 	@Override
 	
@@ -130,5 +133,91 @@ public class AdminNoticeServiceImpl implements AdminNoticeService{
 	ArrayList<ReplyDTO> replyanswerList(ReplyDTO dto) {
 		return admin.replyanswerList(dto);
 	} 
+	
+	
+	@Override
+	public
+	int getinfoadmincount(String nickname)  throws Exception{
+		return admin.getinfoadmincount(nickname);
+	} 
+	
+	
+	@Override
+	public
+	List<AdminNoticeDTO> getinformationadminPaging(Map<String, Object> pstr) {
+		return admin.getinformationadminPaging(pstr);
+	}
+	
+	
+	@Override
+	public
+	int getinforeplycount(String nickname)  throws Exception{
+		return admin.getinforeplycount(nickname);
+	} 
+	
+	@Override
+	public
+	List<ReplyDTO> getinformationareplyPaging(Map<String, Object> pstr) {
+		return admin.getinformationareplyPaging(pstr);
+	}
+	@Override
+	public
+	int getinformywritecount(Map<String, Object> checkcount)  throws Exception{
+		return admin.getinformywritecount(checkcount);
+	} 
+	
+	@Override
+	public int pictureWriteReplydeleteGrpas(ReplyDTO dto) throws Exception{
+		return admin.pictureWriteReplydeleteGrpas(dto);
+	} 
+	
+	
+	
+	@Override
+	public
+	List<MywritelistDTO> getinfomywritelistPaging(Map<String, Object> pstr) {
+		return admin.getinfomywritelistPaging(pstr);
+	}
+	
+	
+	@Override
+	public
+	String getname(String idx ) {
+		return admin.getname(idx);
+	}
+	
+	
+	@Override
+	public
+	String matchgrp(String bidx) {
+		return admin.matchgrp(bidx);
+	}
+	@Override
+	public ReplyDTO getonemember(String idx) {
+		return admin.getonemember(idx);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
