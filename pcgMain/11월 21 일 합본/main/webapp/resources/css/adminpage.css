@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+
+
+
+
+
+.adminall {
+  
+  display: flex;
+  flex-direction: column; /* 세로로 나란히 정렬 */	
+  width : 15%;
+  min-height: 100vh;
+  background-color: lightgray;
+  background-color : #f5f5f7;
+  float:left;
+	
+
+}
+.adminpage {
+
+  padding: 10px;
+  
+  
+}
+
+
+.memberlist-paging{
+	
+	width : 70%;
+	height : 700px;
+	background-color : #fff;
+	 float:left;
+	
+}
+
+
